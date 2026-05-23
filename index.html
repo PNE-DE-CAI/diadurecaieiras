@@ -77,6 +77,8 @@
     .opcao-item span { font-weight: bold; width: 25px; }
     .opcao-item input[type="text"] { flex: 1; }
     .loading { text-align: center; padding: 20px; color: #64748b; }
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 2000; }
+    .modal-content { background: white; border-radius: 32px; padding: 2rem; max-width: 500px; width: 90%; }
     @media (max-width: 700px) { .main-container { padding: 12px; } .tabs-nav { overflow-x: auto; flex-wrap: nowrap; } .tab-btn { white-space: nowrap; padding: 0.5rem 1rem; } .form-grid { grid-template-columns: 1fr; } .grid-2, .grid-3 { grid-template-columns: 1fr; } }
     @media print { body { background: white; padding: 0; margin: 0; } .main-container { background: white; padding: 10px; box-shadow: none; border: none; } .tabs-nav, .header .title-badge, .btn, footer, .toast { display: none !important; } .card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; } }
   </style>
@@ -109,7 +111,7 @@
         <div class="form-group"><label>Período *</label><select id="rPeriodo" required><option value="">Selecione</option><option>Matutino</option><option>Vespertino</option><option>Noturno</option></select></div>
         <div class="form-group" style="grid-column:1/-1"><label>Professor(a) Coordenador(a) *</label><input type="text" id="rProfessor" placeholder="Nome do Professor" required></div>
         <div class="form-group" style="grid-column:1/-1"><label>Observações</label><textarea id="rObservacoes" placeholder="Adicione observações..."></textarea></div>
-        <div style="grid-column:1/-1;display:flex;gap:12px"><button type="submit" class="btn"><i class="fas fa-save"></i> Salvar Registro</button><button type="reset" class="btn btn-secondary"><i class="fas fa-eraser"></i> Limpar</button></div>
+        <div style="grid-column:1/-1;display:flex;gap:12px"><button type="submit" class="btn"><i class="fas fa-save"></i> Salvar Registro</button><button type="reset" class="btn btn-secondary"><i class="fas fa-eraser"></i> Limpar</button><input type="hidden" id="editandoRegistroId" value=""></div>
       </form>
     </div>
     <div class="card"><h3><i class="fas fa-list"></i> Turmas Registradas</h3><div style="overflow-x:auto"><table><thead><tr><th>Escola</th><th>Ano/Série</th><th>Turma</th><th>Período</th><th>Professor</th><th>Observações</th><th>Ações</th></tr></thead><tbody id="registrosTableBody"></tbody></table></div></div>
@@ -129,7 +131,7 @@
     <div class="card"><h3><i class="fas fa-chart-bar"></i> Turmas que Realizaram o Quiz</h3><div style="overflow-x:auto"><table><thead><tr><th>Escola</th><th>Ano/Série</th><th>Turma</th><th>Período</th><th>Professor</th><th>Data/Hora</th><th>Status</th></tr></thead><tbody id="dashTableBody"></tbody></table></div></div>
   </div>
 
-  <!-- ABA 4: GERENCIAR QUESTÕES (CORRIGIDA) -->
+  <!-- ABA 4: GERENCIAR QUESTÕES -->
   <div id="gerenciar" class="tab-content">
     <div class="card">
       <h3><i class="fas fa-plus-circle"></i> Adicionar/Editar Questão</h3>
@@ -169,7 +171,6 @@
 
   let questoesAtuais = [], respostas = [], questaoAtual = 0, timerInterval, tempoRestante = 120;
 
-  // Funções auxiliares
   function showToast(msg, isError = false) {
     const t = document.getElementById('toast');
     t.innerText = msg;
@@ -178,16 +179,16 @@
     setTimeout(() => { t.style.display = 'none'; t.style.background = '#1f2937'; }, 4000);
   }
 
-  // Inicializar dropdowns escolas
   function inicializarDropdowns() {
     [document.getElementById('rEscola'), document.getElementById('dashEscola')].forEach(sel => {
       if(sel) { sel.innerHTML = '<option value="">Selecione a Escola</option>'; escolasOficiais.forEach(e => sel.innerHTML += `<option value="${e}">${e}</option>`); }
     });
   }
 
-  // ==================== REGISTROS ====================
+  // ==================== REGISTROS DA TURMA (COM EDIÇÃO) ====================
   document.getElementById('registroTurmaForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
+    const editandoId = document.getElementById('editandoRegistroId').value;
     const dados = {
       escola: document.getElementById('rEscola').value,
       anoSerie: document.getElementById('rAnoSerie').value,
@@ -195,13 +196,20 @@
       periodo: document.getElementById('rPeriodo').value,
       professor: document.getElementById('rProfessor').value,
       observacoes: document.getElementById('rObservacoes').value,
-      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
       status: 'Registrado'
     };
+    if(!editandoId) dados.timestamp = firebase.firestore.FieldValue.serverTimestamp();
     try {
-      await db.collection('quiz_registros').add(dados);
-      showToast('✅ Turma registrada com sucesso!');
+      if(editandoId) {
+        await db.collection('quiz_registros').doc(editandoId).update(dados);
+        showToast('✅ Turma atualizada com sucesso!');
+      } else {
+        dados.timestamp = firebase.firestore.FieldValue.serverTimestamp();
+        await db.collection('quiz_registros').add(dados);
+        showToast('✅ Turma registrada com sucesso!');
+      }
       document.getElementById('registroTurmaForm').reset();
+      document.getElementById('editandoRegistroId').value = '';
       carregarRegistros();
     } catch(err) { showToast('❌ Erro ao salvar: '+err.message, true); }
   });
@@ -209,8 +217,46 @@
   async function carregarRegistros() {
     try {
       const snap = await db.collection('quiz_registros').orderBy('timestamp', 'desc').get();
-      document.getElementById('registrosTableBody').innerHTML = snap.docs.map(doc => `<tr><td>${doc.data().escola}</td><td>${doc.data().anoSerie}</td><td>${doc.data().turma}</td><td>${doc.data().periodo}</td><td>${doc.data().professor}</td><td>${doc.data().observacoes || '-'}</td><td><button class="btn" onclick="alert('Edição em desenvolvimento')" style="padding:4px 8px"><i class="fas fa-edit"></i></button></td>`).join('');
+      document.getElementById('registrosTableBody').innerHTML = snap.docs.map(doc => {
+        const d = doc.data();
+        return `<tr>
+          <td>${d.escola}</td>
+          <td>${d.anoSerie}</td>
+          <td>${d.turma}</td>
+          <td>${d.periodo}</td>
+          <td>${d.professor}</td>
+          <td>${d.observacoes || '-'}</td>
+          <td><button class="btn" onclick="editarRegistro('${doc.id}')" style="padding:4px 8px"><i class="fas fa-edit"></i></button>
+            <button class="btn btn-danger" onclick="excluirRegistro('${doc.id}')" style="padding:4px 8px"><i class="fas fa-trash"></i></button>
+          </td>
+        `;
+      }).join('');
     } catch(err) { showToast('Erro ao carregar registros', true); }
+  }
+
+  async function editarRegistro(id) {
+    try {
+      const doc = await db.collection('quiz_registros').doc(id).get();
+      if(!doc.exists) return;
+      const d = doc.data();
+      document.getElementById('rEscola').value = d.escola;
+      document.getElementById('rAnoSerie').value = d.anoSerie;
+      document.getElementById('rTurma').value = d.turma;
+      document.getElementById('rPeriodo').value = d.periodo;
+      document.getElementById('rProfessor').value = d.professor;
+      document.getElementById('rObservacoes').value = d.observacoes || '';
+      document.getElementById('editandoRegistroId').value = id;
+      showToast('Editando registro. Clique em Salvar para atualizar.');
+    } catch(err) { showToast('Erro ao carregar registro: '+err.message, true); }
+  }
+
+  async function excluirRegistro(id) {
+    if(!confirm('Excluir permanentemente este registro?')) return;
+    try {
+      await db.collection('quiz_registros').doc(id).delete();
+      showToast('🗑️ Registro excluído');
+      carregarRegistros();
+    } catch(err) { showToast('Erro ao excluir: '+err.message, true); }
   }
 
   // ==================== QUIZ ====================
@@ -307,14 +353,13 @@
   }
   function gerarPDFDashboard() { html2pdf().set({margin:10,filename:'Dashboard_Quiz.pdf',image:{type:'jpeg',quality:0.98},html2canvas:{scale:2},jsPDF:{orientation:'landscape',unit:'mm',format:'a4'}}).from(document.querySelector('.main-container')).save(); }
 
-  // ==================== GERENCIAR QUESTÕES (CORRIGIDO) ====================
+  // ==================== GERENCIAR QUESTÕES ====================
   function gerarOpcoesInputs() {
     let html = '';
     for(let i=0;i<4;i++) html += `<div class="opcao-item"><span>${String.fromCharCode(65+i)})</span><input type="text" id="opcao${i}" placeholder="Alternativa ${String.fromCharCode(65+i)}" required></div>`;
     document.getElementById('opcoesContainer').innerHTML = html;
   }
 
-  // Salvar questão (criar ou atualizar)
   document.getElementById('questaoForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = document.getElementById('btnSalvarQuestao');
@@ -378,11 +423,7 @@
       tbody.innerHTML = snap.docs.map(doc => {
         const d = doc.data();
         return `<tr>
-          <td>${d.ano}° Ano</td>
-          <td>${d.numero}</td>
-          <td>${d.disciplina}</td>
-          <td>${d.descriptor}</td>
-          <td>${d.texto.substring(0,50)}...</td>
+          <td>${d.ano}° Ano</td><td>${d.numero}</td><td>${d.disciplina}</td><td>${d.descriptor}</td><td>${d.texto.substring(0,50)}...</td>
           <td>${d.imagem ? '<i class="fas fa-image"></i>' : '-'}</td>
           <td><button class="btn" onclick="editarQuestao('${doc.id}')" style="padding:4px 8px"><i class="fas fa-edit"></i></button> <button class="btn btn-danger" onclick="excluirQuestao('${doc.id}')" style="padding:4px 8px"><i class="fas fa-trash"></i></button></td>
         `;
@@ -428,7 +469,7 @@
     document.getElementById('formStatus').innerHTML = '';
   }
 
-  // Inicialização e abas
+  // Abas
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const tab = btn.getAttribute('data-tab');
