@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Sistema de Quiz - Anos Finais | URE-CAIEIRAS</title>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: linear-gradient(145deg, #0a2f6c 0%, #041a3a 100%); min-height: 100vh; padding: 20px; color: #1e293b; }
+    .main-container { max-width: 1400px; margin: 0 auto; background: #0f1a24; border-radius: 48px; padding: 20px; box-shadow: 0 30px 35px rgba(0,0,0,0.5), inset 0 1px 4px rgba(255,255,200,0.1); border: 1px solid #d32f2f; }
+    .header { display: flex; justify-content: space-between; align-items: center; background: rgba(10, 47, 108, 0.85); backdrop-filter: blur(4px); padding: 12px 24px; border-radius: 60px; margin-bottom: 25px; flex-wrap: wrap; gap: 15px; }
+    .logo-area { display: flex; align-items: center; gap: 12px; }
+    .logo-area img { max-height: 50px; width: auto; background: white; border-radius: 12px; padding: 4px; }
+    .logo-area span { font-size: 1.2rem; font-weight: 600; color: #ffec9e; }
+    .title-badge { background: #d32f2f; color: white; padding: 6px 18px; border-radius: 3rem; font-weight: bold; letter-spacing: 1px; font-size: 0.9rem; }
+    .tabs-nav { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0 0 1.8rem 0; background: rgba(255,255,255,0.05); padding: 0.8rem 1rem; border-radius: 60px; }
+    .tab-btn { background: transparent; border: none; padding: 0.7rem 1.4rem; font-size: 0.95rem; font-weight: 600; cursor: pointer; border-radius: 40px; color: #e2e8f0; font-family: 'Inter', sans-serif; transition: 0.2s; }
+    .tab-btn i { margin-right: 8px; }
+    .tab-btn:hover { background: rgba(211, 47, 47, 0.3); color: white; }
+    .tab-btn.active { background: #d32f2f; color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+    .tab-content { display: none; animation: fadeIn 0.3s ease; }
+    .tab-content.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px);} to { opacity: 1; transform: translateY(0);} }
+    .card { background: white; border-radius: 32px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 8px 20px rgba(0,0,0,0.2); border: 1px solid #e0e4e9; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.8rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.3rem; }
+    .form-group label { font-size: 0.8rem; font-weight: 600; color: #64748b; text-transform: uppercase; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border-radius: 12px; border: 1px solid #cbd5e1; font-size: 0.9rem; font-family: 'Inter', sans-serif; }
+    .form-group textarea { resize: vertical; min-height: 100px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
+    .btn { background: linear-gradient(135deg, #0a2f6c, #052050); color: white; border: none; border-radius: 60px; padding: 10px 24px; font-weight: 600; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 6px; }
+    .btn:hover { background: #d32f2f; transform: translateY(-2px); }
+    .btn-secondary { background: #64748b; }
+    .btn-secondary:hover { background: #475569; }
+    .btn-danger { background: #ef4444; }
+    .btn-danger:hover { background: #b91c1c; }
+    .btn-success { background: #22c55e; }
+    .btn-success:hover { background: #16a34a; }
+    table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; font-size: 0.9rem; background: white; border-radius: 16px; overflow: hidden; }
+    th, td { padding: 0.7rem; border-bottom: 1px solid #e5e7eb; text-align: left; }
+    th { background: #0a2f6c; color: white; font-weight: 600; }
+    .badge { padding: 0.4rem 0.8rem; border-radius: 30px; font-size: 0.8rem; font-weight: 600; color: white; display: inline-block; }
+    .bg-verde { background: #22c55e; }
+    .bg-amarelo { background: #eab308; color: #1f2937; }
+    .bg-vermelho { background: #ef4444; }
+    .bg-azul { background: #3b82f6; }
+    .info-box { background: #eef3fb; border-left: 5px solid #d32f2f; padding: 1rem 1.2rem; border-radius: 20px; margin: 1rem 0; }
+    .kpi { background: #f8fafc; border-radius: 20px; text-align: center; padding: 1rem; border: 1px solid #e2e8f0; }
+    .kpi h3 { font-size: 0.9rem; color: #64748b; margin-bottom: 0.5rem; }
+    .kpi p { font-size: 2rem; font-weight: 800; color: #0a2f6c; margin: 0; }
+    .toast { position: fixed; bottom: 20px; right: 20px; background: #1f2937; color: white; padding: 12px 20px; border-radius: 40px; display: none; z-index: 1000; font-size: 0.9rem; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+    footer { text-align: center; margin-top: 2rem; padding: 1rem; color: #b4c8e0; font-size: 0.8rem; border-top: 1px solid #2c4c6e; }
+    .question-section { background: #f8fafc; border-radius: 20px; padding: 1.5rem; margin-bottom: 1.5rem; border: 2px solid #e2e8f0; }
+    .question-number { display: inline-block; background: #d32f2f; color: white; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: bold; margin-bottom: 0.5rem; }
+    .question-text { font-size: 1.05rem; font-weight: 600; color: #1e293b; margin: 0.8rem 0; }
+    .question-descriptor { background: white; border-left: 4px solid #3b82f6; padding: 0.8rem; border-radius: 8px; font-size: 0.85rem; color: #475569; margin-bottom: 1rem; }
+    .question-image { max-width: 100%; max-height: 250px; border-radius: 16px; margin: 1rem 0; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .option-group { display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1rem; }
+    .option { display: flex; align-items: flex-start; gap: 0.8rem; cursor: pointer; padding: 8px 12px; border-radius: 12px; transition: 0.1s; }
+    .option:hover { background: #eef2ff; }
+    .option input[type="radio"] { margin-top: 0.3rem; cursor: pointer; }
+    .option label { cursor: pointer; flex: 1; }
+    .feedback-box { background: #f0fdf4; border-left: 5px solid #22c55e; padding: 1rem; border-radius: 16px; margin-top: 1rem; }
+    .feedback-box.incorrect { background: #fef2f2; border-left-color: #ef4444; }
+    .feedback-box .correct-answer { font-weight: bold; color: #16a34a; margin-top: 5px; }
+    .feedback-box.incorrect .correct-answer { color: #dc2626; }
+    .timer { font-size: 1.5rem; font-weight: bold; color: #ef4444; text-align: center; padding: 1rem; background: #fef2f2; border-radius: 12px; margin-bottom: 1rem; }
+    .section-divider { text-align: center; padding: 2rem 0; font-size: 1.5rem; font-weight: bold; color: #0a2f6c; }
+    .image-preview { max-width: 150px; max-height: 100px; margin-top: 5px; border-radius: 8px; }
+    .opcoes-container { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 10px; }
+    .opcao-item { display: flex; gap: 8px; align-items: center; }
+    .opcao-item span { font-weight: bold; width: 25px; }
+    .opcao-item input[type="text"] { flex: 1; }
+    @media (max-width: 700px) { .main-container { padding: 12px; } .tabs-nav { overflow-x: auto; flex-wrap: nowrap; } .tab-btn { white-space: nowrap; padding: 0.5rem 1rem; } .form-grid { grid-template-columns: 1fr; } .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+    @media print { body { background: white; padding: 0; margin: 0; } .main-container { background: white; padding: 10px; box-shadow: none; border: none; } .tabs-nav, .header .title-badge, .btn, footer, .toast { display: none !important; } .card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; } }
+  </style>
+</head>
+<body>
+<div class="main-container">
+  <div class="header">
+    <div class="logo-area">
+      <img src="https://i.ibb.co/0p01LzxB/logo3de.jpg" alt="Logo SEDUC">
+      <span>Sistema de Quiz | Anos Finais</span>
+    </div>
+    <div class="title-badge"><i class="fas fa-graduation-cap"></i> URE-CAIEIRAS</div>
+  </div>
+
+  <div class="tabs-nav">
+    <button class="tab-btn active" data-tab="registros"><i class="fas fa-clipboard"></i> Registros da Turma</button>
+    <button class="tab-btn" data-tab="quiz"><i class="fas fa-question-circle"></i> Quiz</button>
+    <button class="tab-btn" data-tab="dashboard"><i class="fas fa-chart-bar"></i> Dashboard</button>
+    <button class="tab-btn" data-tab="gerenciar"><i class="fas fa-database"></i> Gerenciar Questões</button>
+  </div>
+
+  <!-- ABA 1: REGISTROS DA TURMA -->
+  <div id="registros" class="tab-content active">
+    <div class="card">
+      <h3><i class="fas fa-pencil-alt"></i> Registro de Turma - Quiz Anos Finais</h3>
+      <form id="registroTurmaForm" class="form-grid" style="margin-top: 1.5rem;">
+        <div class="form-group">
+          <label>Escola *</label>
+          <select id="rEscola" required style="width: 100%; padding: 10px;"></select>
+        </div>
+        <div class="form-group">
+          <label>Ano/Série *</label>
+          <select id="rAnoSerie" required>
+            <option value="">Selecione o Ano</option>
+            <option>6° Ano</option><option>7° Ano</option><option>8° Ano</option><option>9° Ano</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Turma *</label>
+          <select id="rTurma" required><option value="">Selecione</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select>
+        </div>
+        <div class="form-group">
+          <label>Período *</label>
+          <select id="rPeriodo" required><option value="">Selecione</option><option>Matutino</option><option>Vespertino</option><option>Noturno</option></select>
+        </div>
+        <div class="form-group" style="grid-column: 1 / -1;">
+          <label>Professor(a) Coordenador(a) *</label>
+          <input type="text" id="rProfessor" placeholder="Nome do Professor" required>
+        </div>
+        <div class="form-group" style="grid-column: 1 / -1;">
+          <label>Observações</label>
+          <textarea id="rObservacoes" placeholder="Adicione observações..."></textarea>
+        </div>
+        <div style="grid-column: 1 / -1; display: flex; gap: 12px; flex-wrap: wrap;">
+          <button type="submit" class="btn"><i class="fas fa-save"></i> Salvar Registro</button>
+          <button type="reset" class="btn btn-secondary"><i class="fas fa-eraser"></i> Limpar</button>
+        </div>
+      </form>
+    </div>
+    <div class="card">
+      <h3><i class="fas fa-list"></i> Turmas Registradas</h3>
+      <div style="overflow-x: auto;">
+        <table><thead><tr><th>Escola</th><th>Ano/Série</th><th>Turma</th><th>Período</th><th>Professor</th><th>Observações</th><th>Ações</th></tr></thead><tbody id="registrosTableBody"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABA 2: QUIZ -->
+  <div id="quiz" class="tab-content">
+    <div class="info-box">
+      <i class="fas fa-info-circle"></i> <strong>Instruções:</strong> Selecione uma alternativa. Após responder, será exibida a resposta correta. Clique em "Próxima" para continuar.
+    </div>
+    <div class="card">
+      <h3><i class="fas fa-cogs"></i> Configurações do Quiz</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Selecione o Ano/Série *</label>
+          <select id="quizAnoSerie"><option value="">Escolha um ano</option><option value="6">6° Ano</option><option value="7">7° Ano</option><option value="8">8° Ano</option><option value="9">9° Ano</option></select>
+        </div>
+        <div><button class="btn" onclick="iniciarQuiz()"><i class="fas fa-play"></i> Iniciar Quiz</button></div>
+      </div>
+    </div>
+    <div id="quizArea" style="display: none;">
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+          <h3 id="quizTitulo">Quiz - Carregando...</h3>
+          <span id="progresso" style="font-size: 1rem; font-weight: 600; color: #0a2f6c;">Questão 1 de 12</span>
+        </div>
+        <div class="timer" id="timer">2:00</div>
+        <div id="questaoContainer"></div>
+        <div style="display: flex; gap: 12px; margin-top: 2rem;">
+          <button class="btn" id="btnAnterior" onclick="questaoAnterior()" style="display: none;"><i class="fas fa-arrow-left"></i> Anterior</button>
+          <button class="btn" id="btnProxima" onclick="questaoProxima()"><i class="fas fa-arrow-right"></i> Próxima</button>
+          <button class="btn btn-danger" id="btnFinalizar" onclick="finalizarQuiz()" style="display: none;"><i class="fas fa-check"></i> Finalizar Quiz</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABA 3: DASHBOARD -->
+  <div id="dashboard" class="tab-content">
+    <div class="card">
+      <h3><i class="fas fa-filter"></i> Filtros</h3>
+      <div class="form-grid">
+        <div class="form-group"><label>Escola</label><select id="dashEscola" onchange="atualizarDashboard()"></select></div>
+        <div class="form-group"><label>Ano/Série</label><select id="dashAnoSerie" onchange="atualizarDashboard()"><option value="">Todos</option><option>6° Ano</option><option>7° Ano</option><option>8° Ano</option><option>9° Ano</option></select></div>
+        <div class="form-group"><label>Turma</label><select id="dashTurma" onchange="atualizarDashboard()"><option value="">Todas</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select></div>
+        <div class="form-group"><label>Período</label><select id="dashPeriodo" onchange="atualizarDashboard()"><option value="">Todos</option><option>Matutino</option><option>Vespertino</option><option>Noturno</option></select></div>
+        <button class="btn" onclick="gerarPDFDashboard()"><i class="fas fa-file-pdf"></i> Gerar PDF</button>
+      </div>
+    </div>
+    <div class="grid-2"><div class="kpi"><h3><i class="fas fa-graduation-cap"></i> Total de Turmas</h3><p id="kpiTotalTurmas">0</p></div><div class="kpi"><h3><i class="fas fa-check-circle"></i> Quiz Realizados</h3><p id="kpiQuizRealizados">0</p></div></div>
+    <div class="card"><h3><i class="fas fa-chart-bar"></i> Turmas que Realizaram o Quiz</h3><div style="overflow-x: auto;"><table><thead><tr><th>Escola</th><th>Ano/Série</th><th>Turma</th><th>Período</th><th>Professor</th><th>Data/Hora</th><th>Status</th></tr></thead><tbody id="dashTableBody"></tbody></table></div></div>
+  </div>
+
+  <!-- ABA 4: GERENCIAR QUESTÕES -->
+  <div id="gerenciar" class="tab-content">
+    <div class="card">
+      <h3><i class="fas fa-plus-circle"></i> Adicionar/Editar Questão</h3>
+      <form id="questaoForm" class="form-grid">
+        <div class="form-group"><label>Ano</label><select id="qAno" required><option value="">Selecione</option><option value="6">6° Ano</option><option value="7">7° Ano</option><option value="8">8° Ano</option><option value="9">9° Ano</option></select></div>
+        <div class="form-group"><label>Número</label><input type="number" id="qNumero" required min="1" max="50"></div>
+        <div class="form-group"><label>Disciplina</label>
+          <select id="qDisciplina" required>
+            <option value="">Selecione a disciplina</option>
+            <option>Língua Portuguesa</option>
+            <option>Matemática</option>
+            <option>Ciências</option>
+            <option>História</option>
+            <option>Geografia</option>
+            <option>Língua Inglesa</option>
+            <option>Arte</option>
+            <option>Educação Física</option>
+            <option>Ensino Religioso</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Descritor</label><input type="text" id="qDescriptor" placeholder="Descritor da questão" required></div>
+        <div class="form-group" style="grid-column: 1/-1;"><label>Texto da Questão</label><textarea id="qTexto" rows="3" required></textarea></div>
+        <div class="form-group" style="grid-column: 1/-1;"><label>URL da Imagem (opcional)</label><input type="text" id="qImagem" placeholder="https://exemplo.com/imagem.jpg"></div>
+        <div class="form-group" style="grid-column: 1/-1;"><label>Alternativas</label><div id="opcoesContainer" class="opcoes-container"></div></div>
+        <div class="form-group"><label>Resposta Correta (0 a 3)</label><input type="number" id="qResposta" min="0" max="3" required></div>
+        <div style="grid-column: 1/-1; display: flex; gap: 12px;"><button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Salvar Questão</button><button type="button" class="btn btn-secondary" onclick="limparFormQuestao()"><i class="fas fa-eraser"></i> Limpar</button><input type="hidden" id="editandoId" value=""></div>
+      </form>
+    </div>
+    <div class="card"><h3><i class="fas fa-list"></i> Questões Cadastradas</h3><select id="filtroAnoLista" onchange="carregarQuestoes()" style="margin-bottom: 1rem; padding: 8px; border-radius: 12px;"><option value="">Todos os Anos</option><option value="6">6° Ano</option><option value="7">7° Ano</option><option value="8">8° Ano</option><option value="9">9° Ano</option></select><div style="overflow-x: auto;"><table><thead><tr><th>Ano</th><th>Nº</th><th>Disciplina</th><th>Descritor</th><th>Texto</th><th>Imagem</th><th>Ações</th></tr></thead><tbody id="questoesTableBody"></tbody></table></div></div>
+  </div>
+
+  <footer><i class="fas fa-university"></i> URE-CAIEIRAS | Sistema de Quiz - Anos Finais | 2026</footer>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+  const firebaseConfig = { apiKey: "AIzaSyBErvxQ0Sk7Uo5cx5A10PTFsR3CTV5PwGY", authDomain: "lojaescolar-38474.firebaseapp.com", projectId: "lojaescolar-38474", storageBucket: "lojaescolar-38474.firebasestorage.app", messagingSenderId: "223928753083", appId: "1:223928753083:web:7bb5e344684eed89a9c29e" };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  const escolasOficiais = ["ADAIL JARBAS DUCLOS", "AFONSO MORENO", "ALADINO POLON", "ALBERTO GRAF CAPITAO","ALBINO FIORE","ALFRIED THEODOR WEISZFLOG","ANA MARIA GARRIDO ORLANDIN PROFA","APARECIDO ROBERTO TONELLOTTI PROFESSOR","ARMANDO SESTINI","ARTHUR WEINGRILL","AZEVEDO SOARES","BAIRRO DO ITAIM","BAIRRO JUNDIAIZINHO","BELEM DA SERRA","BENEDITO APARECIDO TAVARES PROF","BENEDITO FAGUNDES MARQUES","BUENO DE AZEVEDO FILHO PROF","CARLOS AUGUSTO DE PADUA FLEURY PROF","CELESTINA VALENTE LENGENFELDER PROFA","CHACARA CAMPONESA JARDIM VASSOURAS","DOMINGOS CAMBIAGHI PROF","DR. MARIO TOLEDO DE MORAES","DR. NELSON MANZANARES","ELCIO JOSE PEREIRA COTRIM PROF","ELVIRA PARADA MANGA PROFA","FRANCISCO GONCALVES VIEIRA PROF","HERMELINA DE ALBUQUERQUE PASSARELLA PROFA","IRACI SARTORI VIEIRA DA SILVA PROFA","ISAIAS LUIZ MATIAZZO","ISAURA DE MIRANDA BOTTO PROFA","ISAURA VALENTINI HANSER PROFA","IVONE DOS ANJOS DA SILVA CAMPOS PROFA","JARDIM ALEGRIA II","JARDIM DAS ROSAS","JARDIM SAO FRANCISCO","JARDIM SILVIA II","JOAQUIM MARQUES DA SILVA SOBRINHO TTE","JOCIMARA VIEIRA DA SILVA PROFA","JOSE CARLOS DA SILVA JUNIOR","JOSE DE BARROS MARTINS EDITOR","JOSE PARADA PROFESSOR","JOSE ROBERTO MELCHIOR DR","KATIA MARIA TARIFA LEME TONELLI PROFA","LENITA CORREA CAMARGO PROFA","LUIZ ALEXANDRE DOS SANTOS VEREADOR","LYDIA SCALET WALKER PROFA","MARIA ZEZA GOMES DE OLIVEIRA","NAIR HANNICKEL ROMARO","NIDE ZAIM CARDOSO PROFA","ODARICO OLIVEIRA NASCIMENTO PROF","OLINDO DARTORA DR","OTTO WEISZFLOG","OZILDE ALBUQUERQUE PASSARELLA DR","PARQUE CENTO E VINTE II","PAULO DUARTE","PEDRO GALRAO DO NASCIMENTO","PEDRO LELIS DE SOUZA PREFEITO","PEDRO PAULO DE AGUIAR","PIETRO PETRI","RITUCO MITANI PROFA","ROGERIO LEVORIN PROF","SUZANA DIAS","ULYSSES SANCHES RAMIRES PROF","VINCENZO LOBASSI","WALTER RIBAS DE ANDRADE PROF EE","WALTHER WEISZFLOG","ZILTON BICUDO PROF"];
+
+  let questoesAtuais = [], respostas = [], questaoAtual = 0, timerInterval, tempoRestante = 120, feedbackExibido = false;
+
+  function inicializarDropdowns() { [document.getElementById('rEscola'), document.getElementById('dashEscola')].forEach(sel => { sel.innerHTML = '<option value="">Selecione</option>'; escolasOficiais.forEach(e => sel.innerHTML += `<option value="${e}">${e}</option>`); }); }
+  
+  document.getElementById('registroTurmaForm')?.addEventListener('submit', async (e) => { e.preventDefault(); const dados = { escola: document.getElementById('rEscola').value, anoSerie: document.getElementById('rAnoSerie').value, turma: document.getElementById('rTurma').value, periodo: document.getElementById('rPeriodo').value, professor: document.getElementById('rProfessor').value, observacoes: document.getElementById('rObservacoes').value, timestamp: firebase.firestore.FieldValue.serverTimestamp(), status: 'Registrado' }; await db.collection('quiz_registros').add(dados); showToast('✅ Turma registrada!'); document.getElementById('registroTurmaForm').reset(); carregarRegistros(); });
+  async function carregarRegistros() { const snap = await db.collection('quiz_registros').orderBy('timestamp', 'desc').get(); document.getElementById('registrosTableBody').innerHTML = snap.docs.map(doc => `<tr><td>${doc.data().escola}</td><td>${doc.data().anoSerie}</td><td>${doc.data().turma}</td><td>${doc.data().periodo}</td><td>${doc.data().professor}</td><td>${doc.data().observacoes || '-'}</td><td><button class="btn" onclick="editarRegistro('${doc.id}')" style="padding:4px 8px"><i class="fas fa-edit"></i></button></td>`).join(''); }
+
+  async function iniciarQuiz() { const ano = document.getElementById('quizAnoSerie').value; if (!ano) return showToast('❌ Selecione um ano!'); const qSnap = await db.collection('quiz_questoes').where('ano', '==', parseInt(ano)).orderBy('numero').get(); if (qSnap.empty) { showToast('❌ Nenhuma questão cadastrada para este ano! Acesse "Gerenciar Questões".'); return; } questoesAtuais = qSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })); respostas = new Array(questoesAtuais.length).fill(null); questaoAtual = 0; tempoRestante = 120; feedbackExibido = false; document.getElementById('quizArea').style.display = 'block'; document.getElementById('quizTitulo').innerText = `Quiz - ${ano}° Ano`; mostrarQuestao(); iniciarTimer(); }
+
+  function mostrarQuestao() { const q = questoesAtuais[questaoAtual]; let html = `<div class="question-section"><div class="question-number">Questão ${q.numero} de ${questoesAtuais.length}</div><div class="question-descriptor">📌 Descritor: ${q.descriptor}</div><div class="question-descriptor">Disciplina: <strong>${q.disciplina}</strong></div><div class="question-text">${q.texto}</div>`; if (q.imagem && q.imagem.trim()) html += `<div><img src="${q.imagem}" class="question-image" alt="Imagem da questão" onerror="this.style.display='none'"></div>`; html += `<div class="option-group">`; q.opcoes.forEach((opcao, idx) => { const checked = respostas[questaoAtual] === idx ? 'checked' : ''; html += `<div class="option"><input type="radio" id="opcao${idx}" name="resposta" value="${idx}" ${checked} onchange="selecionarResposta(${idx})"><label for="opcao${idx}">${String.fromCharCode(65+idx)}) ${opcao}</label></div>`; }); html += `</div>`; if (respostas[questaoAtual] !== undefined && respostas[questaoAtual] !== null) { const acertou = respostas[questaoAtual] === q.resposta; const respostaCorreta = q.opcoes[q.resposta]; html += `<div class="feedback-box ${acertou ? '' : 'incorrect'}"><i class="fas ${acertou ? 'fa-check-circle' : 'fa-times-circle'}"></i> <strong>${acertou ? 'Correto!' : 'Você errou!'}</strong><div class="correct-answer">✅ Resposta correta: ${String.fromCharCode(65+q.resposta)}) ${respostaCorreta}</div></div>`; } html += `</div>`; document.getElementById('questaoContainer').innerHTML = html; atualizarBotoes(); document.getElementById('progresso').innerText = `Questão ${questaoAtual+1} de ${questoesAtuais.length}`; }
+
+  function selecionarResposta(idx) { if (respostas[questaoAtual] !== undefined && respostas[questaoAtual] !== null) return; respostas[questaoAtual] = idx; mostrarQuestao(); }
+
+  function questaoProxima() { if (respostas[questaoAtual] === undefined || respostas[questaoAtual] === null) { showToast('⚠️ Responda a questão antes de avançar!'); return; } if (questaoAtual < questoesAtuais.length-1) { questaoAtual++; feedbackExibido = false; mostrarQuestao(); } }
+  function questaoAnterior() { if (questaoAtual > 0) { questaoAtual--; mostrarQuestao(); } }
+  function atualizarBotoes() { document.getElementById('btnAnterior').style.display = questaoAtual > 0 ? 'inline-flex' : 'none'; document.getElementById('btnProxima').style.display = questaoAtual < questoesAtuais.length-1 ? 'inline-flex' : 'none'; document.getElementById('btnFinalizar').style.display = questaoAtual === questoesAtuais.length-1 ? 'inline-flex' : 'none'; }
+  function iniciarTimer() { if (timerInterval) clearInterval(timerInterval); timerInterval = setInterval(() => { tempoRestante--; const minutos = Math.floor(tempoRestante/60), segundos = tempoRestante%60; document.getElementById('timer').innerText = `${minutos}:${segundos.toString().padStart(2,'0')}`; if (tempoRestante <= 0) { clearInterval(timerInterval); if (questaoAtual < questoesAtuais.length-1) questaoProxima(); else finalizarQuiz(); tempoRestante = 120; } }, 1000); }
+  async function finalizarQuiz() { clearInterval(timerInterval); let acertos = 0; questoesAtuais.forEach((q,idx) => { if (respostas[idx] === q.resposta) acertos++; }); const percentual = Math.round((acertos/questoesAtuais.length)*100); await db.collection('quiz_resultados').add({ ano: `${document.getElementById('quizAnoSerie').value}° Ano`, acertos, total: questoesAtuais.length, percentual, timestamp: firebase.firestore.FieldValue.serverTimestamp() }); showToast(`✅ Quiz finalizado! Acertos: ${acertos}/${questoesAtuais.length} (${percentual}%)`); document.getElementById('quizArea').style.display = 'none'; }
+
+  async function atualizarDashboard() { let ref = db.collection('quiz_registros'); const escola = document.getElementById('dashEscola').value, anoSerie = document.getElementById('dashAnoSerie').value, turma = document.getElementById('dashTurma').value, periodo = document.getElementById('dashPeriodo').value; if(escola) ref = ref.where('escola','==',escola); if(anoSerie) ref = ref.where('anoSerie','==',anoSerie); if(turma) ref = ref.where('turma','==',turma); if(periodo) ref = ref.where('periodo','==',periodo); const snap = await ref.get(); document.getElementById('dashTableBody').innerHTML = snap.docs.map(doc => `<tr><td>${doc.data().escola}</td><td>${doc.data().anoSerie}</td><td>${doc.data().turma}</td><td>${doc.data().periodo}</td><td>${doc.data().professor}</td><td>${doc.data().timestamp ? new Date(doc.data().timestamp.toDate()).toLocaleString() : '-'}</td><td><span class="badge bg-verde">${doc.data().status}</span></td>`).join(''); document.getElementById('kpiTotalTurmas').innerText = snap.size; }
+  function gerarPDFDashboard() { html2pdf().set({margin:10,filename:'Dashboard_Quiz.pdf',image:{type:'jpeg',quality:0.98},html2canvas:{scale:2},jsPDF:{orientation:'landscape',unit:'mm',format:'a4'}}).from(document.querySelector('.main-container')).save(); }
+  function showToast(msg) { const t = document.getElementById('toast'); t.innerText = msg; t.style.display = 'block'; setTimeout(() => t.style.display = 'none', 3000); }
+
+  // GERENCIAR QUESTÕES
+  function gerarOpcoesInputs() { let html = ''; for(let i=0;i<4;i++) html += `<div class="opcao-item"><span>${String.fromCharCode(65+i)})</span><input type="text" id="opcao${i}" placeholder="Alternativa ${String.fromCharCode(65+i)}" required></div>`; document.getElementById('opcoesContainer').innerHTML = html; }
+  document.getElementById('questaoForm')?.addEventListener('submit', async (e) => { e.preventDefault(); const ano = parseInt(document.getElementById('qAno').value); const numero = parseInt(document.getElementById('qNumero').value); const opcoes = [0,1,2,3].map(i => document.getElementById(`opcao${i}`).value); const dados = { ano, numero, disciplina: document.getElementById('qDisciplina').value, descriptor: document.getElementById('qDescriptor').value, texto: document.getElementById('qTexto').value, imagem: document.getElementById('qImagem').value || '', opcoes, resposta: parseInt(document.getElementById('qResposta').value) }; const editandoId = document.getElementById('editandoId').value; if(editandoId) await db.collection('quiz_questoes').doc(editandoId).update(dados); else await db.collection('quiz_questoes').add(dados); showToast('✅ Questão salva!'); limparFormQuestao(); carregarQuestoes(); });
+  async function carregarQuestoes() { let query = db.collection('quiz_questoes'); const filtro = document.getElementById('filtroAnoLista').value; if(filtro) query = query.where('ano','==',parseInt(filtro)); const snap = await query.orderBy('ano').orderBy('numero').get(); document.getElementById('questoesTableBody').innerHTML = snap.docs.map(doc => { const d = doc.data(); return `<tr><td>${d.ano}° Ano</td><td>${d.numero}</td><td>${d.disciplina}</td><td>${d.descriptor}</td><td>${d.texto.substring(0,50)}...</td><td>${d.imagem ? '<i class="fas fa-image"></i>' : '-'}</td><td><button class="btn" onclick="editarQuestao('${doc.id}')" style="padding:4px 8px"><i class="fas fa-edit"></i></button> <button class="btn btn-danger" onclick="excluirQuestao('${doc.id}')" style="padding:4px 8px"><i class="fas fa-trash"></i></button></td>`; }).join(''); }
+  async function editarQuestao(id) { const doc = await db.collection('quiz_questoes').doc(id).get(); const d = doc.data(); document.getElementById('qAno').value = d.ano; document.getElementById('qNumero').value = d.numero; document.getElementById('qDisciplina').value = d.disciplina; document.getElementById('qDescriptor').value = d.descriptor; document.getElementById('qTexto').value = d.texto; document.getElementById('qImagem').value = d.imagem || ''; for(let i=0;i<4;i++) document.getElementById(`opcao${i}`).value = d.opcoes[i]; document.getElementById('qResposta').value = d.resposta; document.getElementById('editandoId').value = id; }
+  async function excluirQuestao(id) { if(confirm('Excluir esta questão?')) { await db.collection('quiz_questoes').doc(id).delete(); showToast('🗑️ Questão excluída'); carregarQuestoes(); } }
+  function limparFormQuestao() { document.getElementById('questaoForm').reset(); document.getElementById('editandoId').value = ''; gerarOpcoesInputs(); }
+
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', () => { const tab = btn.getAttribute('data-tab'); document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); document.getElementById(tab).classList.add('active'); btn.classList.add('active'); if(tab === 'dashboard') atualizarDashboard(); if(tab === 'registros') carregarRegistros(); if(tab === 'gerenciar') carregarQuestoes(); }));
+  inicializarDropdowns(); carregarRegistros(); gerarOpcoesInputs(); carregarQuestoes();
+</script>
+</body>
+</html>
