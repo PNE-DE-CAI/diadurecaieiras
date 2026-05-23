@@ -72,12 +72,11 @@
     .feedback-box .correct-answer { font-weight: bold; color: #16a34a; margin-top: 5px; }
     .feedback-box.incorrect .correct-answer { color: #dc2626; }
     .timer { font-size: 1.5rem; font-weight: bold; color: #ef4444; text-align: center; padding: 1rem; background: #fef2f2; border-radius: 12px; margin-bottom: 1rem; }
-    .section-divider { text-align: center; padding: 2rem 0; font-size: 1.5rem; font-weight: bold; color: #0a2f6c; }
-    .image-preview { max-width: 150px; max-height: 100px; margin-top: 5px; border-radius: 8px; }
     .opcoes-container { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 10px; }
     .opcao-item { display: flex; gap: 8px; align-items: center; }
     .opcao-item span { font-weight: bold; width: 25px; }
     .opcao-item input[type="text"] { flex: 1; }
+    .loading { text-align: center; padding: 20px; color: #64748b; }
     @media (max-width: 700px) { .main-container { padding: 12px; } .tabs-nav { overflow-x: auto; flex-wrap: nowrap; } .tab-btn { white-space: nowrap; padding: 0.5rem 1rem; } .form-grid { grid-template-columns: 1fr; } .grid-2, .grid-3 { grid-template-columns: 1fr; } }
     @media print { body { background: white; padding: 0; margin: 0; } .main-container { background: white; padding: 10px; box-shadow: none; border: none; } .tabs-nav, .header .title-badge, .btn, footer, .toast { display: none !important; } .card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; } }
   </style>
@@ -104,125 +103,50 @@
     <div class="card">
       <h3><i class="fas fa-pencil-alt"></i> Registro de Turma - Quiz Anos Finais</h3>
       <form id="registroTurmaForm" class="form-grid" style="margin-top: 1.5rem;">
-        <div class="form-group">
-          <label>Escola *</label>
-          <select id="rEscola" required style="width: 100%; padding: 10px;"></select>
-        </div>
-        <div class="form-group">
-          <label>Ano/Série *</label>
-          <select id="rAnoSerie" required>
-            <option value="">Selecione o Ano</option>
-            <option>6° Ano</option><option>7° Ano</option><option>8° Ano</option><option>9° Ano</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Turma *</label>
-          <select id="rTurma" required><option value="">Selecione</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select>
-        </div>
-        <div class="form-group">
-          <label>Período *</label>
-          <select id="rPeriodo" required><option value="">Selecione</option><option>Matutino</option><option>Vespertino</option><option>Noturno</option></select>
-        </div>
-        <div class="form-group" style="grid-column: 1 / -1;">
-          <label>Professor(a) Coordenador(a) *</label>
-          <input type="text" id="rProfessor" placeholder="Nome do Professor" required>
-        </div>
-        <div class="form-group" style="grid-column: 1 / -1;">
-          <label>Observações</label>
-          <textarea id="rObservacoes" placeholder="Adicione observações..."></textarea>
-        </div>
-        <div style="grid-column: 1 / -1; display: flex; gap: 12px; flex-wrap: wrap;">
-          <button type="submit" class="btn"><i class="fas fa-save"></i> Salvar Registro</button>
-          <button type="reset" class="btn btn-secondary"><i class="fas fa-eraser"></i> Limpar</button>
-        </div>
+        <div class="form-group"><label>Escola *</label><select id="rEscola" required></select></div>
+        <div class="form-group"><label>Ano/Série *</label><select id="rAnoSerie" required><option value="">Selecione</option><option>6° Ano</option><option>7° Ano</option><option>8° Ano</option><option>9° Ano</option></select></div>
+        <div class="form-group"><label>Turma *</label><select id="rTurma" required><option value="">Selecione</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select></div>
+        <div class="form-group"><label>Período *</label><select id="rPeriodo" required><option value="">Selecione</option><option>Matutino</option><option>Vespertino</option><option>Noturno</option></select></div>
+        <div class="form-group" style="grid-column:1/-1"><label>Professor(a) Coordenador(a) *</label><input type="text" id="rProfessor" placeholder="Nome do Professor" required></div>
+        <div class="form-group" style="grid-column:1/-1"><label>Observações</label><textarea id="rObservacoes" placeholder="Adicione observações..."></textarea></div>
+        <div style="grid-column:1/-1;display:flex;gap:12px"><button type="submit" class="btn"><i class="fas fa-save"></i> Salvar Registro</button><button type="reset" class="btn btn-secondary"><i class="fas fa-eraser"></i> Limpar</button></div>
       </form>
     </div>
-    <div class="card">
-      <h3><i class="fas fa-list"></i> Turmas Registradas</h3>
-      <div style="overflow-x: auto;">
-        <table><thead><tr><th>Escola</th><th>Ano/Série</th><th>Turma</th><th>Período</th><th>Professor</th><th>Observações</th><th>Ações</th></tr></thead><tbody id="registrosTableBody"></tbody></table>
-      </div>
-    </div>
+    <div class="card"><h3><i class="fas fa-list"></i> Turmas Registradas</h3><div style="overflow-x:auto"><table><thead><tr><th>Escola</th><th>Ano/Série</th><th>Turma</th><th>Período</th><th>Professor</th><th>Observações</th><th>Ações</th></tr></thead><tbody id="registrosTableBody"></tbody></table></div></div>
   </div>
 
   <!-- ABA 2: QUIZ -->
   <div id="quiz" class="tab-content">
-    <div class="info-box">
-      <i class="fas fa-info-circle"></i> <strong>Instruções:</strong> Selecione uma alternativa. Após responder, será exibida a resposta correta. Clique em "Próxima" para continuar.
-    </div>
-    <div class="card">
-      <h3><i class="fas fa-cogs"></i> Configurações do Quiz</h3>
-      <div class="form-grid">
-        <div class="form-group">
-          <label>Selecione o Ano/Série *</label>
-          <select id="quizAnoSerie"><option value="">Escolha um ano</option><option value="6">6° Ano</option><option value="7">7° Ano</option><option value="8">8° Ano</option><option value="9">9° Ano</option></select>
-        </div>
-        <div><button class="btn" onclick="iniciarQuiz()"><i class="fas fa-play"></i> Iniciar Quiz</button></div>
-      </div>
-    </div>
-    <div id="quizArea" style="display: none;">
-      <div class="card">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-          <h3 id="quizTitulo">Quiz - Carregando...</h3>
-          <span id="progresso" style="font-size: 1rem; font-weight: 600; color: #0a2f6c;">Questão 1 de 12</span>
-        </div>
-        <div class="timer" id="timer">2:00</div>
-        <div id="questaoContainer"></div>
-        <div style="display: flex; gap: 12px; margin-top: 2rem;">
-          <button class="btn" id="btnAnterior" onclick="questaoAnterior()" style="display: none;"><i class="fas fa-arrow-left"></i> Anterior</button>
-          <button class="btn" id="btnProxima" onclick="questaoProxima()"><i class="fas fa-arrow-right"></i> Próxima</button>
-          <button class="btn btn-danger" id="btnFinalizar" onclick="finalizarQuiz()" style="display: none;"><i class="fas fa-check"></i> Finalizar Quiz</button>
-        </div>
-      </div>
-    </div>
+    <div class="info-box"><i class="fas fa-info-circle"></i> <strong>Instruções:</strong> Selecione uma alternativa. Após responder, será exibida a resposta correta. Clique em "Próxima" para continuar.</div>
+    <div class="card"><h3><i class="fas fa-cogs"></i> Configurações do Quiz</h3><div class="form-grid"><div class="form-group"><label>Selecione o Ano/Série *</label><select id="quizAnoSerie"><option value="">Escolha um ano</option><option value="6">6° Ano</option><option value="7">7° Ano</option><option value="8">8° Ano</option><option value="9">9° Ano</option></select></div><div><button class="btn" onclick="iniciarQuiz()"><i class="fas fa-play"></i> Iniciar Quiz</button></div></div></div>
+    <div id="quizArea" style="display:none"><div class="card"><div style="display:flex;justify-content:space-between;margin-bottom:1.5rem"><h3 id="quizTitulo">Quiz - Carregando...</h3><span id="progresso">Questão 1 de 12</span></div><div class="timer" id="timer">2:00</div><div id="questaoContainer"></div><div style="display:flex;gap:12px;margin-top:2rem"><button class="btn" id="btnAnterior" onclick="questaoAnterior()" style="display:none"><i class="fas fa-arrow-left"></i> Anterior</button><button class="btn" id="btnProxima" onclick="questaoProxima()"><i class="fas fa-arrow-right"></i> Próxima</button><button class="btn btn-danger" id="btnFinalizar" onclick="finalizarQuiz()" style="display:none"><i class="fas fa-check"></i> Finalizar Quiz</button></div></div></div>
   </div>
 
   <!-- ABA 3: DASHBOARD -->
   <div id="dashboard" class="tab-content">
-    <div class="card">
-      <h3><i class="fas fa-filter"></i> Filtros</h3>
-      <div class="form-grid">
-        <div class="form-group"><label>Escola</label><select id="dashEscola" onchange="atualizarDashboard()"></select></div>
-        <div class="form-group"><label>Ano/Série</label><select id="dashAnoSerie" onchange="atualizarDashboard()"><option value="">Todos</option><option>6° Ano</option><option>7° Ano</option><option>8° Ano</option><option>9° Ano</option></select></div>
-        <div class="form-group"><label>Turma</label><select id="dashTurma" onchange="atualizarDashboard()"><option value="">Todas</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select></div>
-        <div class="form-group"><label>Período</label><select id="dashPeriodo" onchange="atualizarDashboard()"><option value="">Todos</option><option>Matutino</option><option>Vespertino</option><option>Noturno</option></select></div>
-        <button class="btn" onclick="gerarPDFDashboard()"><i class="fas fa-file-pdf"></i> Gerar PDF</button>
-      </div>
-    </div>
+    <div class="card"><h3><i class="fas fa-filter"></i> Filtros</h3><div class="form-grid"><div class="form-group"><label>Escola</label><select id="dashEscola" onchange="atualizarDashboard()"></select></div><div class="form-group"><label>Ano/Série</label><select id="dashAnoSerie" onchange="atualizarDashboard()"><option value="">Todos</option><option>6° Ano</option><option>7° Ano</option><option>8° Ano</option><option>9° Ano</option></select></div><div class="form-group"><label>Turma</label><select id="dashTurma" onchange="atualizarDashboard()"><option value="">Todas</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select></div><div class="form-group"><label>Período</label><select id="dashPeriodo" onchange="atualizarDashboard()"><option value="">Todos</option><option>Matutino</option><option>Vespertino</option><option>Noturno</option></select></div><button class="btn" onclick="gerarPDFDashboard()"><i class="fas fa-file-pdf"></i> Gerar PDF</button></div></div>
     <div class="grid-2"><div class="kpi"><h3><i class="fas fa-graduation-cap"></i> Total de Turmas</h3><p id="kpiTotalTurmas">0</p></div><div class="kpi"><h3><i class="fas fa-check-circle"></i> Quiz Realizados</h3><p id="kpiQuizRealizados">0</p></div></div>
-    <div class="card"><h3><i class="fas fa-chart-bar"></i> Turmas que Realizaram o Quiz</h3><div style="overflow-x: auto;"><table><thead><tr><th>Escola</th><th>Ano/Série</th><th>Turma</th><th>Período</th><th>Professor</th><th>Data/Hora</th><th>Status</th></tr></thead><tbody id="dashTableBody"></tbody></table></div></div>
+    <div class="card"><h3><i class="fas fa-chart-bar"></i> Turmas que Realizaram o Quiz</h3><div style="overflow-x:auto"><table><thead><tr><th>Escola</th><th>Ano/Série</th><th>Turma</th><th>Período</th><th>Professor</th><th>Data/Hora</th><th>Status</th></tr></thead><tbody id="dashTableBody"></tbody></table></div></div>
   </div>
 
-  <!-- ABA 4: GERENCIAR QUESTÕES -->
+  <!-- ABA 4: GERENCIAR QUESTÕES (CORRIGIDA) -->
   <div id="gerenciar" class="tab-content">
     <div class="card">
       <h3><i class="fas fa-plus-circle"></i> Adicionar/Editar Questão</h3>
       <form id="questaoForm" class="form-grid">
         <div class="form-group"><label>Ano</label><select id="qAno" required><option value="">Selecione</option><option value="6">6° Ano</option><option value="7">7° Ano</option><option value="8">8° Ano</option><option value="9">9° Ano</option></select></div>
         <div class="form-group"><label>Número</label><input type="number" id="qNumero" required min="1" max="50"></div>
-        <div class="form-group"><label>Disciplina</label>
-          <select id="qDisciplina" required>
-            <option value="">Selecione a disciplina</option>
-            <option>Língua Portuguesa</option>
-            <option>Matemática</option>
-            <option>Ciências</option>
-            <option>História</option>
-            <option>Geografia</option>
-            <option>Língua Inglesa</option>
-            <option>Arte</option>
-            <option>Educação Física</option>
-            <option>Ensino Religioso</option>
-          </select>
-        </div>
+        <div class="form-group"><label>Disciplina</label><select id="qDisciplina" required><option value="">Selecione</option><option>Língua Portuguesa</option><option>Matemática</option><option>Ciências</option><option>História</option><option>Geografia</option><option>Língua Inglesa</option><option>Arte</option><option>Educação Física</option><option>Ensino Religioso</option></select></div>
         <div class="form-group"><label>Descritor</label><input type="text" id="qDescriptor" placeholder="Descritor da questão" required></div>
-        <div class="form-group" style="grid-column: 1/-1;"><label>Texto da Questão</label><textarea id="qTexto" rows="3" required></textarea></div>
-        <div class="form-group" style="grid-column: 1/-1;"><label>URL da Imagem (opcional)</label><input type="text" id="qImagem" placeholder="https://exemplo.com/imagem.jpg"></div>
-        <div class="form-group" style="grid-column: 1/-1;"><label>Alternativas</label><div id="opcoesContainer" class="opcoes-container"></div></div>
+        <div class="form-group" style="grid-column:1/-1"><label>Texto da Questão</label><textarea id="qTexto" rows="3" required></textarea></div>
+        <div class="form-group" style="grid-column:1/-1"><label>URL da Imagem (opcional)</label><input type="text" id="qImagem" placeholder="https://exemplo.com/imagem.jpg"></div>
+        <div class="form-group" style="grid-column:1/-1"><label>Alternativas</label><div id="opcoesContainer" class="opcoes-container"></div></div>
         <div class="form-group"><label>Resposta Correta (0 a 3)</label><input type="number" id="qResposta" min="0" max="3" required></div>
-        <div style="grid-column: 1/-1; display: flex; gap: 12px;"><button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Salvar Questão</button><button type="button" class="btn btn-secondary" onclick="limparFormQuestao()"><i class="fas fa-eraser"></i> Limpar</button><input type="hidden" id="editandoId" value=""></div>
+        <div style="grid-column:1/-1;display:flex;gap:12px"><button type="submit" class="btn btn-success" id="btnSalvarQuestao"><i class="fas fa-save"></i> Salvar Questão</button><button type="button" class="btn btn-secondary" onclick="limparFormQuestao()"><i class="fas fa-eraser"></i> Limpar</button><input type="hidden" id="editandoId" value=""></div>
+        <div id="formStatus" style="grid-column:1/-1; font-size:0.85rem; margin-top:5px;"></div>
       </form>
     </div>
-    <div class="card"><h3><i class="fas fa-list"></i> Questões Cadastradas</h3><select id="filtroAnoLista" onchange="carregarQuestoes()" style="margin-bottom: 1rem; padding: 8px; border-radius: 12px;"><option value="">Todos os Anos</option><option value="6">6° Ano</option><option value="7">7° Ano</option><option value="8">8° Ano</option><option value="9">9° Ano</option></select><div style="overflow-x: auto;"><table><thead><tr><th>Ano</th><th>Nº</th><th>Disciplina</th><th>Descritor</th><th>Texto</th><th>Imagem</th><th>Ações</th></tr></thead><tbody id="questoesTableBody"></tbody></table></div></div>
+    <div class="card"><h3><i class="fas fa-list"></i> Questões Cadastradas</h3><select id="filtroAnoLista" onchange="carregarQuestoes()" style="margin-bottom:1rem;padding:8px;border-radius:12px"><option value="">Todos os Anos</option><option value="6">6° Ano</option><option value="7">7° Ano</option><option value="8">8° Ano</option><option value="9">9° Ano</option></select><div style="overflow-x:auto"><table><thead><tr><th>Ano</th><th>Nº</th><th>Disciplina</th><th>Descritor</th><th>Texto</th><th>Imagem</th><th>Ações</th></tr></thead><tbody id="questoesTableBody"><tr><td colspan="7" class="loading">Carregando questões...</td></tr></tbody></table></div></div>
   </div>
 
   <footer><i class="fas fa-university"></i> URE-CAIEIRAS | Sistema de Quiz - Anos Finais | 2026</footer>
@@ -230,45 +154,298 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  const firebaseConfig = { apiKey: "AIzaSyBErvxQ0Sk7Uo5cx5A10PTFsR3CTV5PwGY", authDomain: "lojaescolar-38474.firebaseapp.com", projectId: "lojaescolar-38474", storageBucket: "lojaescolar-38474.firebasestorage.app", messagingSenderId: "223928753083", appId: "1:223928753083:web:7bb5e344684eed89a9c29e" };
+  const firebaseConfig = {
+    apiKey: "AIzaSyBErvxQ0Sk7Uo5cx5A10PTFsR3CTV5PwGY",
+    authDomain: "lojaescolar-38474.firebaseapp.com",
+    projectId: "lojaescolar-38474",
+    storageBucket: "lojaescolar-38474.firebasestorage.app",
+    messagingSenderId: "223928753083",
+    appId: "1:223928753083:web:7bb5e344684eed89a9c29e"
+  };
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
 
   const escolasOficiais = ["ADAIL JARBAS DUCLOS", "AFONSO MORENO", "ALADINO POLON", "ALBERTO GRAF CAPITAO","ALBINO FIORE","ALFRIED THEODOR WEISZFLOG","ANA MARIA GARRIDO ORLANDIN PROFA","APARECIDO ROBERTO TONELLOTTI PROFESSOR","ARMANDO SESTINI","ARTHUR WEINGRILL","AZEVEDO SOARES","BAIRRO DO ITAIM","BAIRRO JUNDIAIZINHO","BELEM DA SERRA","BENEDITO APARECIDO TAVARES PROF","BENEDITO FAGUNDES MARQUES","BUENO DE AZEVEDO FILHO PROF","CARLOS AUGUSTO DE PADUA FLEURY PROF","CELESTINA VALENTE LENGENFELDER PROFA","CHACARA CAMPONESA JARDIM VASSOURAS","DOMINGOS CAMBIAGHI PROF","DR. MARIO TOLEDO DE MORAES","DR. NELSON MANZANARES","ELCIO JOSE PEREIRA COTRIM PROF","ELVIRA PARADA MANGA PROFA","FRANCISCO GONCALVES VIEIRA PROF","HERMELINA DE ALBUQUERQUE PASSARELLA PROFA","IRACI SARTORI VIEIRA DA SILVA PROFA","ISAIAS LUIZ MATIAZZO","ISAURA DE MIRANDA BOTTO PROFA","ISAURA VALENTINI HANSER PROFA","IVONE DOS ANJOS DA SILVA CAMPOS PROFA","JARDIM ALEGRIA II","JARDIM DAS ROSAS","JARDIM SAO FRANCISCO","JARDIM SILVIA II","JOAQUIM MARQUES DA SILVA SOBRINHO TTE","JOCIMARA VIEIRA DA SILVA PROFA","JOSE CARLOS DA SILVA JUNIOR","JOSE DE BARROS MARTINS EDITOR","JOSE PARADA PROFESSOR","JOSE ROBERTO MELCHIOR DR","KATIA MARIA TARIFA LEME TONELLI PROFA","LENITA CORREA CAMARGO PROFA","LUIZ ALEXANDRE DOS SANTOS VEREADOR","LYDIA SCALET WALKER PROFA","MARIA ZEZA GOMES DE OLIVEIRA","NAIR HANNICKEL ROMARO","NIDE ZAIM CARDOSO PROFA","ODARICO OLIVEIRA NASCIMENTO PROF","OLINDO DARTORA DR","OTTO WEISZFLOG","OZILDE ALBUQUERQUE PASSARELLA DR","PARQUE CENTO E VINTE II","PAULO DUARTE","PEDRO GALRAO DO NASCIMENTO","PEDRO LELIS DE SOUZA PREFEITO","PEDRO PAULO DE AGUIAR","PIETRO PETRI","RITUCO MITANI PROFA","ROGERIO LEVORIN PROF","SUZANA DIAS","ULYSSES SANCHES RAMIRES PROF","VINCENZO LOBASSI","WALTER RIBAS DE ANDRADE PROF EE","WALTHER WEISZFLOG","ZILTON BICUDO PROF"];
 
-  let questoesAtuais = [], respostas = [], questaoAtual = 0, timerInterval, tempoRestante = 120, feedbackExibido = false;
+  let questoesAtuais = [], respostas = [], questaoAtual = 0, timerInterval, tempoRestante = 120;
 
-  function inicializarDropdowns() { [document.getElementById('rEscola'), document.getElementById('dashEscola')].forEach(sel => { sel.innerHTML = '<option value="">Selecione</option>'; escolasOficiais.forEach(e => sel.innerHTML += `<option value="${e}">${e}</option>`); }); }
-  
-  document.getElementById('registroTurmaForm')?.addEventListener('submit', async (e) => { e.preventDefault(); const dados = { escola: document.getElementById('rEscola').value, anoSerie: document.getElementById('rAnoSerie').value, turma: document.getElementById('rTurma').value, periodo: document.getElementById('rPeriodo').value, professor: document.getElementById('rProfessor').value, observacoes: document.getElementById('rObservacoes').value, timestamp: firebase.firestore.FieldValue.serverTimestamp(), status: 'Registrado' }; await db.collection('quiz_registros').add(dados); showToast('✅ Turma registrada!'); document.getElementById('registroTurmaForm').reset(); carregarRegistros(); });
-  async function carregarRegistros() { const snap = await db.collection('quiz_registros').orderBy('timestamp', 'desc').get(); document.getElementById('registrosTableBody').innerHTML = snap.docs.map(doc => `<tr><td>${doc.data().escola}</td><td>${doc.data().anoSerie}</td><td>${doc.data().turma}</td><td>${doc.data().periodo}</td><td>${doc.data().professor}</td><td>${doc.data().observacoes || '-'}</td><td><button class="btn" onclick="editarRegistro('${doc.id}')" style="padding:4px 8px"><i class="fas fa-edit"></i></button></td>`).join(''); }
+  // Funções auxiliares
+  function showToast(msg, isError = false) {
+    const t = document.getElementById('toast');
+    t.innerText = msg;
+    t.style.background = isError ? '#b91c1c' : '#1f2937';
+    t.style.display = 'block';
+    setTimeout(() => { t.style.display = 'none'; t.style.background = '#1f2937'; }, 4000);
+  }
 
-  async function iniciarQuiz() { const ano = document.getElementById('quizAnoSerie').value; if (!ano) return showToast('❌ Selecione um ano!'); const qSnap = await db.collection('quiz_questoes').where('ano', '==', parseInt(ano)).orderBy('numero').get(); if (qSnap.empty) { showToast('❌ Nenhuma questão cadastrada para este ano! Acesse "Gerenciar Questões".'); return; } questoesAtuais = qSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })); respostas = new Array(questoesAtuais.length).fill(null); questaoAtual = 0; tempoRestante = 120; feedbackExibido = false; document.getElementById('quizArea').style.display = 'block'; document.getElementById('quizTitulo').innerText = `Quiz - ${ano}° Ano`; mostrarQuestao(); iniciarTimer(); }
+  // Inicializar dropdowns escolas
+  function inicializarDropdowns() {
+    [document.getElementById('rEscola'), document.getElementById('dashEscola')].forEach(sel => {
+      if(sel) { sel.innerHTML = '<option value="">Selecione a Escola</option>'; escolasOficiais.forEach(e => sel.innerHTML += `<option value="${e}">${e}</option>`); }
+    });
+  }
 
-  function mostrarQuestao() { const q = questoesAtuais[questaoAtual]; let html = `<div class="question-section"><div class="question-number">Questão ${q.numero} de ${questoesAtuais.length}</div><div class="question-descriptor">📌 Descritor: ${q.descriptor}</div><div class="question-descriptor">Disciplina: <strong>${q.disciplina}</strong></div><div class="question-text">${q.texto}</div>`; if (q.imagem && q.imagem.trim()) html += `<div><img src="${q.imagem}" class="question-image" alt="Imagem da questão" onerror="this.style.display='none'"></div>`; html += `<div class="option-group">`; q.opcoes.forEach((opcao, idx) => { const checked = respostas[questaoAtual] === idx ? 'checked' : ''; html += `<div class="option"><input type="radio" id="opcao${idx}" name="resposta" value="${idx}" ${checked} onchange="selecionarResposta(${idx})"><label for="opcao${idx}">${String.fromCharCode(65+idx)}) ${opcao}</label></div>`; }); html += `</div>`; if (respostas[questaoAtual] !== undefined && respostas[questaoAtual] !== null) { const acertou = respostas[questaoAtual] === q.resposta; const respostaCorreta = q.opcoes[q.resposta]; html += `<div class="feedback-box ${acertou ? '' : 'incorrect'}"><i class="fas ${acertou ? 'fa-check-circle' : 'fa-times-circle'}"></i> <strong>${acertou ? 'Correto!' : 'Você errou!'}</strong><div class="correct-answer">✅ Resposta correta: ${String.fromCharCode(65+q.resposta)}) ${respostaCorreta}</div></div>`; } html += `</div>`; document.getElementById('questaoContainer').innerHTML = html; atualizarBotoes(); document.getElementById('progresso').innerText = `Questão ${questaoAtual+1} de ${questoesAtuais.length}`; }
+  // ==================== REGISTROS ====================
+  document.getElementById('registroTurmaForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const dados = {
+      escola: document.getElementById('rEscola').value,
+      anoSerie: document.getElementById('rAnoSerie').value,
+      turma: document.getElementById('rTurma').value,
+      periodo: document.getElementById('rPeriodo').value,
+      professor: document.getElementById('rProfessor').value,
+      observacoes: document.getElementById('rObservacoes').value,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      status: 'Registrado'
+    };
+    try {
+      await db.collection('quiz_registros').add(dados);
+      showToast('✅ Turma registrada com sucesso!');
+      document.getElementById('registroTurmaForm').reset();
+      carregarRegistros();
+    } catch(err) { showToast('❌ Erro ao salvar: '+err.message, true); }
+  });
 
-  function selecionarResposta(idx) { if (respostas[questaoAtual] !== undefined && respostas[questaoAtual] !== null) return; respostas[questaoAtual] = idx; mostrarQuestao(); }
+  async function carregarRegistros() {
+    try {
+      const snap = await db.collection('quiz_registros').orderBy('timestamp', 'desc').get();
+      document.getElementById('registrosTableBody').innerHTML = snap.docs.map(doc => `<tr><td>${doc.data().escola}</td><td>${doc.data().anoSerie}</td><td>${doc.data().turma}</td><td>${doc.data().periodo}</td><td>${doc.data().professor}</td><td>${doc.data().observacoes || '-'}</td><td><button class="btn" onclick="alert('Edição em desenvolvimento')" style="padding:4px 8px"><i class="fas fa-edit"></i></button></td>`).join('');
+    } catch(err) { showToast('Erro ao carregar registros', true); }
+  }
 
-  function questaoProxima() { if (respostas[questaoAtual] === undefined || respostas[questaoAtual] === null) { showToast('⚠️ Responda a questão antes de avançar!'); return; } if (questaoAtual < questoesAtuais.length-1) { questaoAtual++; feedbackExibido = false; mostrarQuestao(); } }
-  function questaoAnterior() { if (questaoAtual > 0) { questaoAtual--; mostrarQuestao(); } }
-  function atualizarBotoes() { document.getElementById('btnAnterior').style.display = questaoAtual > 0 ? 'inline-flex' : 'none'; document.getElementById('btnProxima').style.display = questaoAtual < questoesAtuais.length-1 ? 'inline-flex' : 'none'; document.getElementById('btnFinalizar').style.display = questaoAtual === questoesAtuais.length-1 ? 'inline-flex' : 'none'; }
-  function iniciarTimer() { if (timerInterval) clearInterval(timerInterval); timerInterval = setInterval(() => { tempoRestante--; const minutos = Math.floor(tempoRestante/60), segundos = tempoRestante%60; document.getElementById('timer').innerText = `${minutos}:${segundos.toString().padStart(2,'0')}`; if (tempoRestante <= 0) { clearInterval(timerInterval); if (questaoAtual < questoesAtuais.length-1) questaoProxima(); else finalizarQuiz(); tempoRestante = 120; } }, 1000); }
-  async function finalizarQuiz() { clearInterval(timerInterval); let acertos = 0; questoesAtuais.forEach((q,idx) => { if (respostas[idx] === q.resposta) acertos++; }); const percentual = Math.round((acertos/questoesAtuais.length)*100); await db.collection('quiz_resultados').add({ ano: `${document.getElementById('quizAnoSerie').value}° Ano`, acertos, total: questoesAtuais.length, percentual, timestamp: firebase.firestore.FieldValue.serverTimestamp() }); showToast(`✅ Quiz finalizado! Acertos: ${acertos}/${questoesAtuais.length} (${percentual}%)`); document.getElementById('quizArea').style.display = 'none'; }
+  // ==================== QUIZ ====================
+  async function iniciarQuiz() {
+    const ano = document.getElementById('quizAnoSerie').value;
+    if(!ano) { showToast('❌ Selecione um ano!', true); return; }
+    try {
+      const qSnap = await db.collection('quiz_questoes').where('ano', '==', parseInt(ano)).orderBy('numero').get();
+      if(qSnap.empty) { showToast('❌ Nenhuma questão cadastrada para este ano! Acesse "Gerenciar Questões".', true); return; }
+      questoesAtuais = qSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      respostas = new Array(questoesAtuais.length).fill(null);
+      questaoAtual = 0;
+      tempoRestante = 120;
+      document.getElementById('quizArea').style.display = 'block';
+      document.getElementById('quizTitulo').innerText = `Quiz - ${ano}° Ano`;
+      mostrarQuestao();
+      iniciarTimer();
+    } catch(err) { showToast('Erro ao carregar questões: '+err.message, true); }
+  }
 
-  async function atualizarDashboard() { let ref = db.collection('quiz_registros'); const escola = document.getElementById('dashEscola').value, anoSerie = document.getElementById('dashAnoSerie').value, turma = document.getElementById('dashTurma').value, periodo = document.getElementById('dashPeriodo').value; if(escola) ref = ref.where('escola','==',escola); if(anoSerie) ref = ref.where('anoSerie','==',anoSerie); if(turma) ref = ref.where('turma','==',turma); if(periodo) ref = ref.where('periodo','==',periodo); const snap = await ref.get(); document.getElementById('dashTableBody').innerHTML = snap.docs.map(doc => `<tr><td>${doc.data().escola}</td><td>${doc.data().anoSerie}</td><td>${doc.data().turma}</td><td>${doc.data().periodo}</td><td>${doc.data().professor}</td><td>${doc.data().timestamp ? new Date(doc.data().timestamp.toDate()).toLocaleString() : '-'}</td><td><span class="badge bg-verde">${doc.data().status}</span></td>`).join(''); document.getElementById('kpiTotalTurmas').innerText = snap.size; }
+  function mostrarQuestao() {
+    const q = questoesAtuais[questaoAtual];
+    let html = `<div class="question-section"><div class="question-number">Questão ${q.numero} de ${questoesAtuais.length}</div><div class="question-descriptor">📌 Descritor: ${q.descriptor}</div><div class="question-descriptor">Disciplina: <strong>${q.disciplina}</strong></div><div class="question-text">${q.texto}</div>`;
+    if(q.imagem && q.imagem.trim()) html += `<div><img src="${q.imagem}" class="question-image" alt="Imagem" onerror="this.style.display='none'"></div>`;
+    html += `<div class="option-group">`;
+    q.opcoes.forEach((opcao, idx) => {
+      const checked = respostas[questaoAtual] === idx ? 'checked' : '';
+      html += `<div class="option"><input type="radio" id="opcao${idx}" name="resposta" value="${idx}" ${checked} onchange="selecionarResposta(${idx})"><label for="opcao${idx}">${String.fromCharCode(65+idx)}) ${opcao}</label></div>`;
+    });
+    html += `</div>`;
+    if(respostas[questaoAtual] !== undefined && respostas[questaoAtual] !== null) {
+      const acertou = respostas[questaoAtual] === q.resposta;
+      const respostaCorreta = q.opcoes[q.resposta];
+      html += `<div class="feedback-box ${acertou ? '' : 'incorrect'}"><i class="fas ${acertou ? 'fa-check-circle' : 'fa-times-circle'}"></i> <strong>${acertou ? 'Correto!' : 'Você errou!'}</strong><div class="correct-answer">✅ Resposta correta: ${String.fromCharCode(65+q.resposta)}) ${respostaCorreta}</div></div>`;
+    }
+    html += `</div>`;
+    document.getElementById('questaoContainer').innerHTML = html;
+    atualizarBotoes();
+    document.getElementById('progresso').innerText = `Questão ${questaoAtual+1} de ${questoesAtuais.length}`;
+  }
+
+  function selecionarResposta(idx) {
+    if(respostas[questaoAtual] !== undefined && respostas[questaoAtual] !== null) return;
+    respostas[questaoAtual] = idx;
+    mostrarQuestao();
+  }
+
+  function questaoProxima() {
+    if(respostas[questaoAtual] === undefined || respostas[questaoAtual] === null) { showToast('⚠️ Responda a questão antes de avançar!', true); return; }
+    if(questaoAtual < questoesAtuais.length-1) { questaoAtual++; mostrarQuestao(); }
+  }
+  function questaoAnterior() { if(questaoAtual > 0) { questaoAtual--; mostrarQuestao(); } }
+  function atualizarBotoes() {
+    document.getElementById('btnAnterior').style.display = questaoAtual > 0 ? 'inline-flex' : 'none';
+    document.getElementById('btnProxima').style.display = questaoAtual < questoesAtuais.length-1 ? 'inline-flex' : 'none';
+    document.getElementById('btnFinalizar').style.display = questaoAtual === questoesAtuais.length-1 ? 'inline-flex' : 'none';
+  }
+  function iniciarTimer() {
+    if(timerInterval) clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+      tempoRestante--;
+      const minutos = Math.floor(tempoRestante/60), segundos = tempoRestante%60;
+      document.getElementById('timer').innerText = `${minutos}:${segundos.toString().padStart(2,'0')}`;
+      if(tempoRestante <= 0) {
+        clearInterval(timerInterval);
+        if(questaoAtual < questoesAtuais.length-1) questaoProxima();
+        else finalizarQuiz();
+        tempoRestante = 120;
+        iniciarTimer();
+      }
+    }, 1000);
+  }
+  async function finalizarQuiz() {
+    clearInterval(timerInterval);
+    let acertos = 0;
+    questoesAtuais.forEach((q,idx) => { if(respostas[idx] === q.resposta) acertos++; });
+    const percentual = Math.round((acertos/questoesAtuais.length)*100);
+    await db.collection('quiz_resultados').add({ ano: `${document.getElementById('quizAnoSerie').value}° Ano`, acertos, total: questoesAtuais.length, percentual, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+    showToast(`✅ Quiz finalizado! Acertos: ${acertos}/${questoesAtuais.length} (${percentual}%)`);
+    document.getElementById('quizArea').style.display = 'none';
+  }
+
+  // ==================== DASHBOARD ====================
+  async function atualizarDashboard() {
+    let ref = db.collection('quiz_registros');
+    const escola = document.getElementById('dashEscola').value, anoSerie = document.getElementById('dashAnoSerie').value, turma = document.getElementById('dashTurma').value, periodo = document.getElementById('dashPeriodo').value;
+    if(escola) ref = ref.where('escola','==',escola);
+    if(anoSerie) ref = ref.where('anoSerie','==',anoSerie);
+    if(turma) ref = ref.where('turma','==',turma);
+    if(periodo) ref = ref.where('periodo','==',periodo);
+    const snap = await ref.get();
+    document.getElementById('dashTableBody').innerHTML = snap.docs.map(doc => `<tr><td>${doc.data().escola}</td><td>${doc.data().anoSerie}</td><td>${doc.data().turma}</td><td>${doc.data().periodo}</td><td>${doc.data().professor}</td><td>${doc.data().timestamp ? new Date(doc.data().timestamp.toDate()).toLocaleString() : '-'}</td><td><span class="badge bg-verde">${doc.data().status}</span></td>`).join('');
+    document.getElementById('kpiTotalTurmas').innerText = snap.size;
+  }
   function gerarPDFDashboard() { html2pdf().set({margin:10,filename:'Dashboard_Quiz.pdf',image:{type:'jpeg',quality:0.98},html2canvas:{scale:2},jsPDF:{orientation:'landscape',unit:'mm',format:'a4'}}).from(document.querySelector('.main-container')).save(); }
-  function showToast(msg) { const t = document.getElementById('toast'); t.innerText = msg; t.style.display = 'block'; setTimeout(() => t.style.display = 'none', 3000); }
 
-  // GERENCIAR QUESTÕES
-  function gerarOpcoesInputs() { let html = ''; for(let i=0;i<4;i++) html += `<div class="opcao-item"><span>${String.fromCharCode(65+i)})</span><input type="text" id="opcao${i}" placeholder="Alternativa ${String.fromCharCode(65+i)}" required></div>`; document.getElementById('opcoesContainer').innerHTML = html; }
-  document.getElementById('questaoForm')?.addEventListener('submit', async (e) => { e.preventDefault(); const ano = parseInt(document.getElementById('qAno').value); const numero = parseInt(document.getElementById('qNumero').value); const opcoes = [0,1,2,3].map(i => document.getElementById(`opcao${i}`).value); const dados = { ano, numero, disciplina: document.getElementById('qDisciplina').value, descriptor: document.getElementById('qDescriptor').value, texto: document.getElementById('qTexto').value, imagem: document.getElementById('qImagem').value || '', opcoes, resposta: parseInt(document.getElementById('qResposta').value) }; const editandoId = document.getElementById('editandoId').value; if(editandoId) await db.collection('quiz_questoes').doc(editandoId).update(dados); else await db.collection('quiz_questoes').add(dados); showToast('✅ Questão salva!'); limparFormQuestao(); carregarQuestoes(); });
-  async function carregarQuestoes() { let query = db.collection('quiz_questoes'); const filtro = document.getElementById('filtroAnoLista').value; if(filtro) query = query.where('ano','==',parseInt(filtro)); const snap = await query.orderBy('ano').orderBy('numero').get(); document.getElementById('questoesTableBody').innerHTML = snap.docs.map(doc => { const d = doc.data(); return `<tr><td>${d.ano}° Ano</td><td>${d.numero}</td><td>${d.disciplina}</td><td>${d.descriptor}</td><td>${d.texto.substring(0,50)}...</td><td>${d.imagem ? '<i class="fas fa-image"></i>' : '-'}</td><td><button class="btn" onclick="editarQuestao('${doc.id}')" style="padding:4px 8px"><i class="fas fa-edit"></i></button> <button class="btn btn-danger" onclick="excluirQuestao('${doc.id}')" style="padding:4px 8px"><i class="fas fa-trash"></i></button></td>`; }).join(''); }
-  async function editarQuestao(id) { const doc = await db.collection('quiz_questoes').doc(id).get(); const d = doc.data(); document.getElementById('qAno').value = d.ano; document.getElementById('qNumero').value = d.numero; document.getElementById('qDisciplina').value = d.disciplina; document.getElementById('qDescriptor').value = d.descriptor; document.getElementById('qTexto').value = d.texto; document.getElementById('qImagem').value = d.imagem || ''; for(let i=0;i<4;i++) document.getElementById(`opcao${i}`).value = d.opcoes[i]; document.getElementById('qResposta').value = d.resposta; document.getElementById('editandoId').value = id; }
-  async function excluirQuestao(id) { if(confirm('Excluir esta questão?')) { await db.collection('quiz_questoes').doc(id).delete(); showToast('🗑️ Questão excluída'); carregarQuestoes(); } }
-  function limparFormQuestao() { document.getElementById('questaoForm').reset(); document.getElementById('editandoId').value = ''; gerarOpcoesInputs(); }
+  // ==================== GERENCIAR QUESTÕES (CORRIGIDO) ====================
+  function gerarOpcoesInputs() {
+    let html = '';
+    for(let i=0;i<4;i++) html += `<div class="opcao-item"><span>${String.fromCharCode(65+i)})</span><input type="text" id="opcao${i}" placeholder="Alternativa ${String.fromCharCode(65+i)}" required></div>`;
+    document.getElementById('opcoesContainer').innerHTML = html;
+  }
 
-  document.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', () => { const tab = btn.getAttribute('data-tab'); document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); document.getElementById(tab).classList.add('active'); btn.classList.add('active'); if(tab === 'dashboard') atualizarDashboard(); if(tab === 'registros') carregarRegistros(); if(tab === 'gerenciar') carregarQuestoes(); }));
-  inicializarDropdowns(); carregarRegistros(); gerarOpcoesInputs(); carregarQuestoes();
+  // Salvar questão (criar ou atualizar)
+  document.getElementById('questaoForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('btnSalvarQuestao');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Salvando...';
+    btn.disabled = true;
+    
+    const ano = parseInt(document.getElementById('qAno').value);
+    const numero = parseInt(document.getElementById('qNumero').value);
+    const disciplina = document.getElementById('qDisciplina').value;
+    const descriptor = document.getElementById('qDescriptor').value;
+    const texto = document.getElementById('qTexto').value;
+    const imagem = document.getElementById('qImagem').value || '';
+    const opcoes = [0,1,2,3].map(i => document.getElementById(`opcao${i}`).value);
+    const resposta = parseInt(document.getElementById('qResposta').value);
+    const editandoId = document.getElementById('editandoId').value;
+    
+    if(!ano || !numero || !disciplina || !descriptor || !texto || opcoes.some(o => !o.trim()) || isNaN(resposta)) {
+      showToast('Preencha todos os campos corretamente!', true);
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+      return;
+    }
+    
+    const dados = { ano, numero, disciplina, descriptor, texto, imagem, opcoes, resposta };
+    
+    try {
+      if(editandoId) {
+        await db.collection('quiz_questoes').doc(editandoId).update(dados);
+        showToast('✅ Questão atualizada com sucesso!');
+      } else {
+        await db.collection('quiz_questoes').add(dados);
+        showToast('✅ Questão cadastrada com sucesso!');
+      }
+      limparFormQuestao();
+      carregarQuestoes();
+      document.getElementById('formStatus').innerHTML = '<span style="color:green">✔ Operação realizada com sucesso.</span>';
+      setTimeout(() => document.getElementById('formStatus').innerHTML = '', 3000);
+    } catch(err) {
+      console.error(err);
+      showToast('❌ Erro ao salvar: ' + err.message, true);
+      document.getElementById('formStatus').innerHTML = `<span style="color:red">❌ Erro: ${err.message}</span>`;
+    } finally {
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+    }
+  });
+  
+  async function carregarQuestoes() {
+    const tbody = document.getElementById('questoesTableBody');
+    tbody.innerHTML = '<tr><td colspan="7" class="loading">Carregando questões...</td></tr>';
+    try {
+      let query = db.collection('quiz_questoes');
+      const filtro = document.getElementById('filtroAnoLista').value;
+      if(filtro) query = query.where('ano', '==', parseInt(filtro));
+      const snap = await query.orderBy('ano').orderBy('numero').get();
+      if(snap.empty) {
+        tbody.innerHTML = '<tr><td colspan="7">Nenhuma questão cadastrada. Adicione uma acima.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = snap.docs.map(doc => {
+        const d = doc.data();
+        return `<tr>
+          <td>${d.ano}° Ano</td>
+          <td>${d.numero}</td>
+          <td>${d.disciplina}</td>
+          <td>${d.descriptor}</td>
+          <td>${d.texto.substring(0,50)}...</td>
+          <td>${d.imagem ? '<i class="fas fa-image"></i>' : '-'}</td>
+          <td><button class="btn" onclick="editarQuestao('${doc.id}')" style="padding:4px 8px"><i class="fas fa-edit"></i></button> <button class="btn btn-danger" onclick="excluirQuestao('${doc.id}')" style="padding:4px 8px"><i class="fas fa-trash"></i></button></td>
+        `;
+      }).join('');
+    } catch(err) {
+      console.error(err);
+      tbody.innerHTML = `<tr><td colspan="7">Erro ao carregar questões: ${err.message}</td></tr>`;
+      showToast('Erro ao carregar questões do Firestore. Verifique as regras de segurança.', true);
+    }
+  }
+  
+  async function editarQuestao(id) {
+    try {
+      const doc = await db.collection('quiz_questoes').doc(id).get();
+      if(!doc.exists) return;
+      const d = doc.data();
+      document.getElementById('qAno').value = d.ano;
+      document.getElementById('qNumero').value = d.numero;
+      document.getElementById('qDisciplina').value = d.disciplina;
+      document.getElementById('qDescriptor').value = d.descriptor;
+      document.getElementById('qTexto').value = d.texto;
+      document.getElementById('qImagem').value = d.imagem || '';
+      for(let i=0;i<4;i++) document.getElementById(`opcao${i}`).value = d.opcoes[i];
+      document.getElementById('qResposta').value = d.resposta;
+      document.getElementById('editandoId').value = id;
+      showToast('Carregando questão para edição...');
+    } catch(err) { showToast('Erro ao carregar questão: '+err.message, true); }
+  }
+  
+  async function excluirQuestao(id) {
+    if(!confirm('Tem certeza que deseja excluir esta questão permanentemente?')) return;
+    try {
+      await db.collection('quiz_questoes').doc(id).delete();
+      showToast('🗑️ Questão excluída com sucesso.');
+      carregarQuestoes();
+    } catch(err) { showToast('Erro ao excluir: '+err.message, true); }
+  }
+  
+  function limparFormQuestao() {
+    document.getElementById('questaoForm').reset();
+    document.getElementById('editandoId').value = '';
+    gerarOpcoesInputs();
+    document.getElementById('formStatus').innerHTML = '';
+  }
+
+  // Inicialização e abas
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tab = btn.getAttribute('data-tab');
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(tab).classList.add('active');
+      btn.classList.add('active');
+      if(tab === 'dashboard') atualizarDashboard();
+      if(tab === 'registros') carregarRegistros();
+      if(tab === 'gerenciar') carregarQuestoes();
+    });
+  });
+  
+  inicializarDropdowns();
+  carregarRegistros();
+  gerarOpcoesInputs();
+  carregarQuestoes();
 </script>
 </body>
 </html>
