@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Sistema de Quiz - Anos Finais | URE-CAIEIRAS</title>
+  <title>Sistema de Paulistão SARESP 2026 - Anos Finais | URE-CAIEIRAS</title>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -52,7 +52,7 @@
     .question-text { font-size: 1.05rem; font-weight: 600; color: #1e293b; margin: 0.8rem 0; }
     .question-descriptor { background: white; border-left: 4px solid #3b82f6; padding: 0.8rem; border-radius: 8px; font-size: 0.85rem; color: #475569; margin-bottom: 1rem; }
     .question-image { max-width: 100%; max-height: 250px; border-radius: 16px; margin: 0.5rem 0; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-    .legenda-imagem { font-size: 0.8rem; color: #475569; text-align: center; margin-top: 0.3rem; font-style: italic; }
+    .legenda-imagem { font-size: 2rem; color: #475569; text-align: center; margin-top: 0.3rem; font-style: italic; }
     .imagem-container { margin: 1rem 0; text-align: center; }
     .option-group { display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1rem; }
     .option { display: flex; align-items: flex-start; gap: 0.8rem; cursor: pointer; padding: 8px 12px; border-radius: 12px; transition: 0.1s; }
@@ -73,12 +73,12 @@
 <body>
 <div class="main-container">
   <div class="header">
-    <div class="logo-area"><img src="https://i.ibb.co/0p01LzxB/logo3de.jpg" alt="Logo"><span>Sistema de Quiz | Anos Finais</span></div>
+    <div class="logo-area"><img src="https://i.ibb.co/0p01LzxB/logo3de.jpg" alt="Logo"><span>Sistema de Paulistão SARESP 2026  | Anos Finais</span></div>
     <div class="title-badge"><i class="fas fa-graduation-cap"></i> URE-CAIEIRAS</div>
   </div>
   <div class="tabs-nav">
     <button class="tab-btn active" data-tab="registros"><i class="fas fa-clipboard"></i> Registros da Turma</button>
-    <button class="tab-btn" data-tab="quiz"><i class="fas fa-question-circle"></i> Quiz</button>
+    <button class="tab-btn" data-tab="quiz"><i class="fas fa-question-circle"></i> Paulistão SARESP 2026</button>
     <button class="tab-btn" data-tab="dashboard"><i class="fas fa-chart-bar"></i> Dashboard</button>
   </div>
 
@@ -103,18 +103,18 @@
   <div id="quiz" class="tab-content">
     <div class="info-box"><i class="fas fa-info-circle"></i> Selecione a turma e o ano. Responda todas as questões. Ao final, gere o certificado de participação.</div>
     <div class="card">
-      <h3>Configurações do Quiz</h3>
+      <h3>Configurações do Paulistão SARESP 2026</h3>
       <div class="form-grid">
         <div class="form-group"><label>Turma Registrada *</label><select id="quizTurmaId" required><option value="">Carregando turmas...</option></select></div>
         <div class="form-group"><label>Ano/Série *</label><select id="quizAnoSerie"><option value="">Escolha</option><option value="6">6° Ano</option><option value="7">7° Ano</option><option value="8">8° Ano</option><option value="9">9° Ano</option></select></div>
-        <div><button class="btn" onclick="iniciarQuiz()"><i class="fas fa-play"></i> Iniciar Quiz</button></div>
+        <div><button class="btn" onclick="iniciarQuiz()"><i class="fas fa-play"></i> Iniciar Paulistão SARESP 2026 </button></div>
       </div>
     </div>
     <div id="quizArea" style="display:none">
       <div class="card">
         <div class="quiz-header-logo">
           <img src="https://i.ibb.co/0p01LzxB/logo3de.jpg" alt="Logo SEDUC">
-          <h3 id="quizTitulo" style="margin:0;">Quiz - Carregando...</h3>
+          <h3 id="quizTitulo" style="margin:0;">Paulistão SARESP 2026  - Carregando...</h3>
         </div>
         <div style="display:flex;justify-content:space-between; margin-top: -5px; margin-bottom: 15px;"><span id="progresso"></span></div>
         <div class="timer" id="timer">2:00</div>
@@ -132,10 +132,10 @@
   <!-- DASHBOARD -->
   <div id="dashboard" class="tab-content">
     <div class="card"><h3>Filtros</h3><div class="form-grid"><div class="form-group"><label>Escola</label><select id="dashEscola" onchange="atualizarDashboard()"></select></div><div class="form-group"><label>Ano</label><select id="dashAnoSerie" onchange="atualizarDashboard()"><option value="">Todos</option><option>6° Ano</option><option>7° Ano</option><option>8° Ano</option><option>9° Ano</option></select></div><div class="form-group"><label>Turma</label><select id="dashTurma" onchange="atualizarDashboard()"><option value="">Todas</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select></div><div class="form-group"><label>Período</label><select id="dashPeriodo" onchange="atualizarDashboard()"><option value="">Todos</option><option>Matutino</option><option>Vespertino</option><option>Noturno</option></select></div><button class="btn" onclick="gerarPDFDashboard()"><i class="fas fa-file-pdf"></i> Gerar PDF Dashboard</button></div></div>
-    <div class="grid-2"><div class="kpi"><h3>Total Turmas</h3><p id="kpiTotalTurmas">0</p></div><br><div class="kpi"><h3>Quiz Realizados</h3><p id="kpiQuizRealizados">0</p></div><br></div>
+    <div class="grid-2"><div class="kpi"><h3>Total Turmas</h3><p id="kpiTotalTurmas">0</p></div><br><div class="kpi"><h3>Paulistão SARESP 2026  Realizados</h3><p id="kpiQuizRealizados">0</p></div><br></div>
     <div class="card"><h3>Turmas Registradas</h3><div style="overflow-x:auto"><table><thead><tr><th>Escola</th><th>Ano</th><th>Turma</th><th>Período</th><th>Professor</th><th>Data Registro</th><th>Certificado</th></tr></thead><tbody id="dashTableBody"></tbody></table></div></div>
   </div>
-  <footer>URE-CAIEIRAS | Quiz SARESP 2026 | Preparação para a Avaliação</footer>
+  <footer>URE-CAIEIRAS | Paulistão SARESP 2026 | Preparação para a Avaliação</footer>
 </div>
 <div class="toast" id="toast"></div>
 
@@ -155,7 +155,7 @@
   // ==================== BANCO DE QUESTÕES FIXO (COMPLETO) ====================
   const questoesPorAno = {
     6: [
-      { numero: 1, disciplina: "Matemática", descriptor: "Resolver problemas relacionados ao conceito de múltiplos", texto: "Durante um treinamento, os atletas William e Marcelo correm em uma mesma pista. William completa uma volta em 15 minutos, enquanto Marcelo leva 20 minutos. Sabendo que ambos iniciam do mesmo ponto, a cada quantos minutos se encontram no ponto de partida?", opcoes: ["30 minutos", "40 minutos", "60 minutos", "120 minutos"], resposta: 2, imagem: "", legendaImagem: "" },
+    { numero: 1, disciplina: "Matemática", descriptor: "Resolver problemas relacionados ao conceito de múltiplos", texto: "Uma doceira produziu 120 brigadeiros e 150 beijinhos para uma festa. Ela precisa colocar esses doces em bandejas com a mesma quantidade de doces, de modo que todas as bandejas tenham apenas um tipo de doce e com a maior quantidade possível.", opcoes: ["9", "10", "27", "30"], resposta: 0, imagem: "https://i.ibb.co/qL35BVnT/Captura-de-tela-23-5-2026-164251-drive-google-com.jpg", legendaImagem: "A quantidade de bandejas necessárias será" },
       { numero: 2, disciplina: "Matemática", descriptor: "Reconhecer frações que representam uma quantidade", texto: "Qual fração representa 2 de 5 partes iguais?", opcoes: ["1/5", "2/5", "3/5", "4/5"], resposta: 1, imagem: "", legendaImagem: "" },
       { numero: 3, disciplina: "Língua Inglesa", descriptor: "Interpretar texto em língua estrangeira", texto: "O título 'I Don't Like Vegetables!' informa que alguém?", opcoes: ["Come verduras", "Não gosta de vegetais", "Prefere vegetais cozidos", "Não conversa"], resposta: 1, imagem: "", legendaImagem: "" },
       { numero: 4, disciplina: "Língua Inglesa", descriptor: "Interpretar texto com auxílio de material gráfico", texto: "Na árvore genealógica apresentada, Charles Bernard é?", opcoes: ["Irmão de Emma", "Filho de Ava", "Avô de Amelie", "Pai de Brian"], resposta: 2, imagem: "", legendaImagem: "" },
@@ -483,13 +483,13 @@
         <div style="border-bottom: 2px solid #d32f2f; display: inline-block; padding-bottom: 10px; margin-bottom: 20px;">
           <h1 style="color: #0a2f6c; font-size: 34px; margin: 0; letter-spacing: 2px;">CERTIFICADO DE PARTICIPAÇÃO</h1>
         </div>
-        <h3 style="color: #d32f2f; font-size: 20px; margin-top: -5px; font-weight: normal;">SARESP 2026 – Quiz Preparatório</h3>
+        <h3 style="color: #d32f2f; font-size: 20px; margin-top: -5px; font-weight: normal;">Paulistão SARESP 2026 ★ Preparatório</h3>
         <p style="font-size: 18px; margin-top: 25px;">Certificamos que a turma</p>
         <h2 style="font-size: 28px; margin: 10px 0 5px; color: #0a2f6c;">${escapeHtml(turmaData.escola)}</h2>
         <p style="font-size: 20px; font-weight: bold;">${escapeHtml(turmaData.anoSerie)} – Turma ${escapeHtml(turmaData.turma)}</p>
         <p style="font-size: 16px;">Período: ${escapeHtml(turmaData.periodo)}<br>Professor(a): ${escapeHtml(turmaData.professor)}</p>
         <div style="background: linear-gradient(145deg, #f0f4fc, #e6edf9); border-radius: 28px; padding: 20px; margin: 25px 0; border: 1px solid #cbd5e1;">
-          <p style="font-size: 20px; font-weight: bold; color: #0a2f6c;">🎯 Desempenho no Quiz</p>
+          <p style="font-size: 20px; font-weight: bold; color: #0a2f6c;">🎯 Desempenho no Paulistão SARESP 2026</p>
           <div style="display: flex; justify-content: center; align-items: baseline; gap: 15px; flex-wrap: wrap; margin: 15px 0;">
             <span style="font-size: 52px; font-weight: 800; color: #d32f2f;">${acertos}/${total}</span>
             <span style="font-size: 24px; color: #0a2f6c;">acertos</span>
@@ -506,7 +506,7 @@
         <p style="margin-top: 25px; font-size: 16px;"><i class="fas fa-calendar-alt"></i> Emitido em: ${dataAtual}</p>
         <div style="display: flex; justify-content: space-between; margin-top: 35px; padding-top: 15px; border-top: 1px solid #ccc;">
           <div style="text-align: center; flex:1;"><p style="font-weight: bold;">_________________________</p><p style="font-size: 14px;">Coordenador(a) Pedagógico(a)</p></div>
-          <div style="text-align: center; flex:1;"><p style="font-weight: bold;">_________________________</p><p style="font-size: 14px;">Diretor(a) da URE-CAIEIRAS</p></div>
+          <div style="text-align: center; flex:1;"><p style="font-weight: bold;">_________________________</p><p style="font-size: 14px;">Diretor(a) da ${escapeHtml(turmaData.escola)}</p></div>
         </div>
         <p style="font-size: 12px; margin-top: 25px; color: #6c757d;">Este certificado é uma homenagem ao esforço da turma na preparação para o SARESP 2026. Continue praticando e acreditando no seu potencial!</p>
       </div>
@@ -599,7 +599,7 @@
     } catch(err) { showToast('Erro no dashboard', true); }
   };
   window.gerarPDFDashboard = () => {
-    html2pdf().set({margin:10,filename:'Dashboard_Quiz.pdf',image:{type:'jpeg',quality:0.98},html2canvas:{scale:2},jsPDF:{orientation:'landscape',unit:'mm',format:'a4'}}).from(document.querySelector('.main-container')).save();
+    html2pdf().set({margin:10,filename:'Dashboard_Paulistão_SARESP_2026.pdf',image:{type:'jpeg',quality:0.98},html2canvas:{scale:2},jsPDF:{orientation:'landscape',unit:'mm',format:'a4'}}).from(document.querySelector('.main-container')).save();
   };
 
   // ==================== INICIALIZAÇÃO E ABAS ====================
