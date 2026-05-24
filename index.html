@@ -8,7 +8,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -32,26 +32,16 @@
     .form-group { display: flex; flex-direction: column; gap: 0.3rem; }
     .form-group label { font-size: 0.8rem; font-weight: 600; color: #64748b; text-transform: uppercase; }
     .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border-radius: 12px; border: 1px solid #cbd5e1; font-size: 0.9rem; font-family: 'Inter', sans-serif; }
-    .form-group textarea { resize: vertical; min-height: 100px; }
-    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
-    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
-    .btn { background: linear-gradient(135deg, #0a2f6c, #052050); color: white; border: none; border-radius: 60px; padding: 10px 24px; font-weight: 600; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 6px; }
+    .btn { background: linear-gradient(135deg, #0a2f6c, #052050); color: white; border: none; border-radius: 60px; padding: 10px 24px; font-weight: 600; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 6px; font-size: 0.9rem; }
     .btn:hover { background: #d32f2f; transform: translateY(-2px); }
     .btn-secondary { background: #64748b; }
-    .btn-secondary:hover { background: #475569; }
     .btn-danger { background: #ef4444; }
-    .btn-danger:hover { background: #b91c1c; }
     .btn-success { background: #22c55e; }
-    .btn-success:hover { background: #16a34a; }
-    table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; font-size: 0.9rem; background: white; border-radius: 16px; overflow: hidden; }
-    th, td { padding: 0.7rem; border-bottom: 1px solid #e5e7eb; text-align: left; }
-    th { background: #0a2f6c; color: white; font-weight: 600; }
     .badge { padding: 0.4rem 0.8rem; border-radius: 30px; font-size: 0.8rem; font-weight: 600; color: white; display: inline-block; }
     .bg-verde { background: #22c55e; }
-    .bg-amarelo { background: #eab308; color: #1f2937; }
-    .bg-vermelho { background: #ef4444; }
-    .bg-azul { background: #3b82f6; }
-    .info-box { background: #eef3fb; border-left: 5px solid #d32f2f; padding: 1rem 1.2rem; border-radius: 20px; margin: 1rem 0; }
+    table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; font-size: 0.9rem; background: white; border-radius: 16px; overflow: hidden; }
+    th, td { padding: 0.7rem; border-bottom: 1px solid #e5e7eb; text-align: left; vertical-align: middle; }
+    th { background: #0a2f6c; color: white; font-weight: 600; }
     .kpi { background: #f8fafc; border-radius: 20px; text-align: center; padding: 1rem; border: 1px solid #e2e8f0; }
     .kpi h3 { font-size: 0.9rem; color: #64748b; margin-bottom: 0.5rem; }
     .kpi p { font-size: 2rem; font-weight: 800; color: #0a2f6c; margin: 0; }
@@ -61,7 +51,9 @@
     .question-number { display: inline-block; background: #d32f2f; color: white; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: bold; margin-bottom: 0.5rem; }
     .question-text { font-size: 1.05rem; font-weight: 600; color: #1e293b; margin: 0.8rem 0; }
     .question-descriptor { background: white; border-left: 4px solid #3b82f6; padding: 0.8rem; border-radius: 8px; font-size: 0.85rem; color: #475569; margin-bottom: 1rem; }
-    .question-image { max-width: 100%; max-height: 250px; border-radius: 16px; margin: 1rem 0; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .question-image { max-width: 100%; max-height: 250px; border-radius: 16px; margin: 0.5rem 0; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .legenda-imagem { font-size: 0.8rem; color: #475569; text-align: center; margin-top: 0.3rem; font-style: italic; }
+    .imagem-container { margin: 1rem 0; text-align: center; }
     .option-group { display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1rem; }
     .option { display: flex; align-items: flex-start; gap: 0.8rem; cursor: pointer; padding: 8px 12px; border-radius: 12px; transition: 0.1s; }
     .option:hover { background: #eef2ff; }
@@ -70,92 +62,85 @@
     .feedback-box { background: #f0fdf4; border-left: 5px solid #22c55e; padding: 1rem; border-radius: 16px; margin-top: 1rem; }
     .feedback-box.incorrect { background: #fef2f2; border-left-color: #ef4444; }
     .feedback-box .correct-answer { font-weight: bold; color: #16a34a; margin-top: 5px; }
-    .feedback-box.incorrect .correct-answer { color: #dc2626; }
     .timer { font-size: 1.5rem; font-weight: bold; color: #ef4444; text-align: center; padding: 1rem; background: #fef2f2; border-radius: 12px; margin-bottom: 1rem; }
-    .opcoes-container { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 10px; }
-    .opcao-item { display: flex; gap: 8px; align-items: center; }
-    .opcao-item span { font-weight: bold; width: 25px; }
-    .opcao-item input[type="text"] { flex: 1; }
-    .loading { text-align: center; padding: 20px; color: #64748b; }
-    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 2000; }
-    .modal-content { background: white; border-radius: 32px; padding: 2rem; max-width: 500px; width: 90%; }
-    @media (max-width: 700px) { .main-container { padding: 12px; } .tabs-nav { overflow-x: auto; flex-wrap: nowrap; } .tab-btn { white-space: nowrap; padding: 0.5rem 1rem; } .form-grid { grid-template-columns: 1fr; } .grid-2, .grid-3 { grid-template-columns: 1fr; } }
-    @media print { body { background: white; padding: 0; margin: 0; } .main-container { background: white; padding: 10px; box-shadow: none; border: none; } .tabs-nav, .header .title-badge, .btn, footer, .toast { display: none !important; } .card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; } }
+    .resultado-box { background: #e6f7e6; border-radius: 20px; padding: 1.5rem; text-align: center; margin-top: 1.5rem; }
+    .quiz-header-logo { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; margin-bottom: 1rem; }
+    .quiz-header-logo img { height: 50px; width: auto; background: white; border-radius: 12px; padding: 5px; }
+    @media (max-width: 700px) { .main-container { padding: 12px; } .tabs-nav { overflow-x: auto; flex-wrap: nowrap; } .tab-btn { white-space: nowrap; } .form-grid { grid-template-columns: 1fr; } table, thead, tbody, th, td, tr { display: block; } th { display: none; } td { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd; } td:before { content: attr(data-label); font-weight: bold; width: 40%; } }
+    @media print { body { background: white; } .main-container { background: white; box-shadow: none; } .tab-btn, .toast, .btn { display: none; } }
   </style>
 </head>
 <body>
 <div class="main-container">
   <div class="header">
-    <div class="logo-area">
-      <img src="https://i.ibb.co/0p01LzxB/logo3de.jpg" alt="Logo SEDUC">
-      <span>Sistema de Quiz | Anos Finais</span>
-    </div>
+    <div class="logo-area"><img src="https://i.ibb.co/0p01LzxB/logo3de.jpg" alt="Logo"><span>Sistema de Quiz | Anos Finais</span></div>
     <div class="title-badge"><i class="fas fa-graduation-cap"></i> URE-CAIEIRAS</div>
   </div>
-
   <div class="tabs-nav">
     <button class="tab-btn active" data-tab="registros"><i class="fas fa-clipboard"></i> Registros da Turma</button>
     <button class="tab-btn" data-tab="quiz"><i class="fas fa-question-circle"></i> Quiz</button>
     <button class="tab-btn" data-tab="dashboard"><i class="fas fa-chart-bar"></i> Dashboard</button>
-    <button class="tab-btn" data-tab="gerenciar"><i class="fas fa-database"></i> Gerenciar Questões</button>
   </div>
 
-  <!-- ABA 1: REGISTROS DA TURMA -->
+  <!-- REGISTROS -->
   <div id="registros" class="tab-content active">
     <div class="card">
-      <h3><i class="fas fa-pencil-alt"></i> Registro de Turma - Quiz Anos Finais</h3>
-      <form id="registroTurmaForm" class="form-grid" style="margin-top: 1.5rem;">
+      <h3><i class="fas fa-pencil-alt"></i> Registro de Turma</h3>
+      <form id="registroTurmaForm" class="form-grid">
         <div class="form-group"><label>Escola *</label><select id="rEscola" required></select></div>
         <div class="form-group"><label>Ano/Série *</label><select id="rAnoSerie" required><option value="">Selecione</option><option>6° Ano</option><option>7° Ano</option><option>8° Ano</option><option>9° Ano</option></select></div>
         <div class="form-group"><label>Turma *</label><select id="rTurma" required><option value="">Selecione</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select></div>
         <div class="form-group"><label>Período *</label><select id="rPeriodo" required><option value="">Selecione</option><option>Matutino</option><option>Vespertino</option><option>Noturno</option></select></div>
-        <div class="form-group" style="grid-column:1/-1"><label>Professor(a) Coordenador(a) *</label><input type="text" id="rProfessor" placeholder="Nome do Professor" required></div>
-        <div class="form-group" style="grid-column:1/-1"><label>Observações</label><textarea id="rObservacoes" placeholder="Adicione observações..."></textarea></div>
-        <div style="grid-column:1/-1;display:flex;gap:12px"><button type="submit" class="btn"><i class="fas fa-save"></i> Salvar Registro</button><button type="reset" class="btn btn-secondary"><i class="fas fa-eraser"></i> Limpar</button><input type="hidden" id="editandoRegistroId" value=""></div>
+        <div class="form-group" style="grid-column:1/-1"><label>Professor(a) *</label><input type="text" id="rProfessor" required></div>
+        <div class="form-group" style="grid-column:1/-1"><label>Observações</label><textarea id="rObservacoes"></textarea></div>
+        <div style="grid-column:1/-1;display:flex;gap:12px"><button type="submit" class="btn"><i class="fas fa-save"></i> Salvar</button><button type="reset" class="btn btn-secondary">Limpar</button><input type="hidden" id="editandoRegistroId"></div>
       </form>
     </div>
-    <div class="card"><h3><i class="fas fa-list"></i> Turmas Registradas</h3><div style="overflow-x:auto"><table><thead><tr><th>Escola</th><th>Ano/Série</th><th>Turma</th><th>Período</th><th>Professor</th><th>Observações</th><th>Ações</th></tr></thead><tbody id="registrosTableBody"></tbody></table></div></div>
+    <div class="card"><h3><i class="fas fa-list"></i> Turmas Registradas</h3><div style="overflow-x:auto"><table><thead><tr><th>Escola</th><th>Ano</th><th>Turma</th><th>Período</th><th>Professor</th><th>Obs</th><th>Ações</th></tr></thead><tbody id="registrosTableBody"></tbody></table></div></div>
   </div>
 
-  <!-- ABA 2: QUIZ -->
+  <!-- QUIZ -->
   <div id="quiz" class="tab-content">
-    <div class="info-box"><i class="fas fa-info-circle"></i> <strong>Instruções:</strong> Selecione uma alternativa. Após responder, será exibida a resposta correta. Clique em "Próxima" para continuar.</div>
-    <div class="card"><h3><i class="fas fa-cogs"></i> Configurações do Quiz</h3><div class="form-grid"><div class="form-group"><label>Selecione o Ano/Série *</label><select id="quizAnoSerie"><option value="">Escolha um ano</option><option value="6">6° Ano</option><option value="7">7° Ano</option><option value="8">8° Ano</option><option value="9">9° Ano</option></select></div><div><button class="btn" onclick="iniciarQuiz()"><i class="fas fa-play"></i> Iniciar Quiz</button></div></div></div>
-    <div id="quizArea" style="display:none"><div class="card"><div style="display:flex;justify-content:space-between;margin-bottom:1.5rem"><h3 id="quizTitulo">Quiz - Carregando...</h3><span id="progresso">Questão 1 de 12</span></div><div class="timer" id="timer">2:00</div><div id="questaoContainer"></div><div style="display:flex;gap:12px;margin-top:2rem"><button class="btn" id="btnAnterior" onclick="questaoAnterior()" style="display:none"><i class="fas fa-arrow-left"></i> Anterior</button><button class="btn" id="btnProxima" onclick="questaoProxima()"><i class="fas fa-arrow-right"></i> Próxima</button><button class="btn btn-danger" id="btnFinalizar" onclick="finalizarQuiz()" style="display:none"><i class="fas fa-check"></i> Finalizar Quiz</button></div></div></div>
-  </div>
-
-  <!-- ABA 3: DASHBOARD -->
-  <div id="dashboard" class="tab-content">
-    <div class="card"><h3><i class="fas fa-filter"></i> Filtros</h3><div class="form-grid"><div class="form-group"><label>Escola</label><select id="dashEscola" onchange="atualizarDashboard()"></select></div><div class="form-group"><label>Ano/Série</label><select id="dashAnoSerie" onchange="atualizarDashboard()"><option value="">Todos</option><option>6° Ano</option><option>7° Ano</option><option>8° Ano</option><option>9° Ano</option></select></div><div class="form-group"><label>Turma</label><select id="dashTurma" onchange="atualizarDashboard()"><option value="">Todas</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select></div><div class="form-group"><label>Período</label><select id="dashPeriodo" onchange="atualizarDashboard()"><option value="">Todos</option><option>Matutino</option><option>Vespertino</option><option>Noturno</option></select></div><button class="btn" onclick="gerarPDFDashboard()"><i class="fas fa-file-pdf"></i> Gerar PDF</button></div></div>
-    <div class="grid-2"><div class="kpi"><h3><i class="fas fa-graduation-cap"></i> Total de Turmas</h3><p id="kpiTotalTurmas">0</p></div><div class="kpi"><h3><i class="fas fa-check-circle"></i> Quiz Realizados</h3><p id="kpiQuizRealizados">0</p></div></div>
-    <div class="card"><h3><i class="fas fa-chart-bar"></i> Turmas que Realizaram o Quiz</h3><div style="overflow-x:auto"><table><thead><tr><th>Escola</th><th>Ano/Série</th><th>Turma</th><th>Período</th><th>Professor</th><th>Data/Hora</th><th>Status</th></tr></thead><tbody id="dashTableBody"></tbody></table></div></div>
-  </div>
-
-  <!-- ABA 4: GERENCIAR QUESTÕES -->
-  <div id="gerenciar" class="tab-content">
+    <div class="info-box"><i class="fas fa-info-circle"></i> Selecione a turma e o ano. Responda todas as questões. Ao final, gere o certificado de participação.</div>
     <div class="card">
-      <h3><i class="fas fa-plus-circle"></i> Adicionar/Editar Questão</h3>
-      <form id="questaoForm" class="form-grid">
-        <div class="form-group"><label>Ano</label><select id="qAno" required><option value="">Selecione</option><option value="6">6° Ano</option><option value="7">7° Ano</option><option value="8">8° Ano</option><option value="9">9° Ano</option></select></div>
-        <div class="form-group"><label>Número</label><input type="number" id="qNumero" required min="1" max="50"></div>
-        <div class="form-group"><label>Disciplina</label><select id="qDisciplina" required><option value="">Selecione</option><option>Língua Portuguesa</option><option>Matemática</option><option>Ciências</option><option>História</option><option>Geografia</option><option>Língua Inglesa</option><option>Arte</option><option>Educação Física</option><option>Ensino Religioso</option></select></div>
-        <div class="form-group"><label>Descritor</label><input type="text" id="qDescriptor" placeholder="Descritor da questão" required></div>
-        <div class="form-group" style="grid-column:1/-1"><label>Texto da Questão</label><textarea id="qTexto" rows="3" required></textarea></div>
-        <div class="form-group" style="grid-column:1/-1"><label>URL da Imagem (opcional)</label><input type="text" id="qImagem" placeholder="https://exemplo.com/imagem.jpg"></div>
-        <div class="form-group" style="grid-column:1/-1"><label>Alternativas</label><div id="opcoesContainer" class="opcoes-container"></div></div>
-        <div class="form-group"><label>Resposta Correta (0 a 3)</label><input type="number" id="qResposta" min="0" max="3" required></div>
-        <div style="grid-column:1/-1;display:flex;gap:12px"><button type="submit" class="btn btn-success" id="btnSalvarQuestao"><i class="fas fa-save"></i> Salvar Questão</button><button type="button" class="btn btn-secondary" onclick="limparFormQuestao()"><i class="fas fa-eraser"></i> Limpar</button><input type="hidden" id="editandoId" value=""></div>
-        <div id="formStatus" style="grid-column:1/-1; font-size:0.85rem; margin-top:5px;"></div>
-      </form>
+      <h3>Configurações do Quiz</h3>
+      <div class="form-grid">
+        <div class="form-group"><label>Turma Registrada *</label><select id="quizTurmaId" required><option value="">Carregando turmas...</option></select></div>
+        <div class="form-group"><label>Ano/Série *</label><select id="quizAnoSerie"><option value="">Escolha</option><option value="6">6° Ano</option><option value="7">7° Ano</option><option value="8">8° Ano</option><option value="9">9° Ano</option></select></div>
+        <div><button class="btn" onclick="iniciarQuiz()"><i class="fas fa-play"></i> Iniciar Quiz</button></div>
+      </div>
     </div>
-    <div class="card"><h3><i class="fas fa-list"></i> Questões Cadastradas</h3><select id="filtroAnoLista" onchange="carregarQuestoes()" style="margin-bottom:1rem;padding:8px;border-radius:12px"><option value="">Todos os Anos</option><option value="6">6° Ano</option><option value="7">7° Ano</option><option value="8">8° Ano</option><option value="9">9° Ano</option></select><div style="overflow-x:auto"><table><thead><tr><th>Ano</th><th>Nº</th><th>Disciplina</th><th>Descritor</th><th>Texto</th><th>Imagem</th><th>Ações</th></tr></thead><tbody id="questoesTableBody"><tr><td colspan="7" class="loading">Carregando questões...</td></tr></tbody></table></div></div>
+    <div id="quizArea" style="display:none">
+      <div class="card">
+        <div class="quiz-header-logo">
+          <img src="https://i.ibb.co/0p01LzxB/logo3de.jpg" alt="Logo SEDUC">
+          <h3 id="quizTitulo" style="margin:0;">Quiz - Carregando...</h3>
+        </div>
+        <div style="display:flex;justify-content:space-between; margin-top: -5px; margin-bottom: 15px;"><span id="progresso"></span></div>
+        <div class="timer" id="timer">2:00</div>
+        <div id="questaoContainer"></div>
+        <div style="display:flex;gap:12px;margin-top:2rem">
+          <button class="btn" id="btnAnterior" onclick="questaoAnterior()" style="display:none"><i class="fas fa-arrow-left"></i> Anterior</button>
+          <button class="btn" id="btnProxima" onclick="questaoProxima()"><i class="fas fa-arrow-right"></i> Próxima</button>
+          <button class="btn btn-danger" id="btnFinalizar" onclick="finalizarQuiz()" style="display:none"><i class="fas fa-check"></i> Finalizar</button>
+        </div>
+      </div>
+    </div>
+    <div id="resultadoFinal" style="display:none" class="card resultado-box"></div>
   </div>
 
-  <footer><i class="fas fa-university"></i> URE-CAIEIRAS | Sistema de Quiz - Anos Finais | 2026</footer>
+  <!-- DASHBOARD -->
+  <div id="dashboard" class="tab-content">
+    <div class="card"><h3>Filtros</h3><div class="form-grid"><div class="form-group"><label>Escola</label><select id="dashEscola" onchange="atualizarDashboard()"></select></div><div class="form-group"><label>Ano</label><select id="dashAnoSerie" onchange="atualizarDashboard()"><option value="">Todos</option><option>6° Ano</option><option>7° Ano</option><option>8° Ano</option><option>9° Ano</option></select></div><div class="form-group"><label>Turma</label><select id="dashTurma" onchange="atualizarDashboard()"><option value="">Todas</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select></div><div class="form-group"><label>Período</label><select id="dashPeriodo" onchange="atualizarDashboard()"><option value="">Todos</option><option>Matutino</option><option>Vespertino</option><option>Noturno</option></select></div><button class="btn" onclick="gerarPDFDashboard()"><i class="fas fa-file-pdf"></i> Gerar PDF Dashboard</button></div></div>
+    <div class="grid-2"><div class="kpi"><h3>Total Turmas</h3><p id="kpiTotalTurmas">0</p></div><br><div class="kpi"><h3>Quiz Realizados</h3><p id="kpiQuizRealizados">0</p></div><br></div>
+    <div class="card"><h3>Turmas Registradas</h3><div style="overflow-x:auto"><table><thead><tr><th>Escola</th><th>Ano</th><th>Turma</th><th>Período</th><th>Professor</th><th>Data Registro</th><th>Certificado</th></tr></thead><tbody id="dashTableBody"></tbody></table></div></div>
+  </div>
+  <footer>URE-CAIEIRAS | Quiz SARESP 2026 | Preparação para a Avaliação</footer>
 </div>
 <div class="toast" id="toast"></div>
 
 <script>
+  // ==================== FIREBASE ====================
   const firebaseConfig = {
     apiKey: "AIzaSyBErvxQ0Sk7Uo5cx5A10PTFsR3CTV5PwGY",
     authDomain: "lojaescolar-38474.firebaseapp.com",
@@ -167,25 +152,123 @@
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
 
+  // ==================== BANCO DE QUESTÕES FIXO (COMPLETO) ====================
+  const questoesPorAno = {
+    6: [
+      { numero: 1, disciplina: "Matemática", descriptor: "Resolver problemas relacionados ao conceito de múltiplos", texto: "Durante um treinamento, os atletas William e Marcelo correm em uma mesma pista. William completa uma volta em 15 minutos, enquanto Marcelo leva 20 minutos. Sabendo que ambos iniciam do mesmo ponto, a cada quantos minutos se encontram no ponto de partida?", opcoes: ["30 minutos", "40 minutos", "60 minutos", "120 minutos"], resposta: 2, imagem: "", legendaImagem: "" },
+      { numero: 2, disciplina: "Matemática", descriptor: "Reconhecer frações que representam uma quantidade", texto: "Qual fração representa 2 de 5 partes iguais?", opcoes: ["1/5", "2/5", "3/5", "4/5"], resposta: 1, imagem: "", legendaImagem: "" },
+      { numero: 3, disciplina: "Língua Inglesa", descriptor: "Interpretar texto em língua estrangeira", texto: "O título 'I Don't Like Vegetables!' informa que alguém?", opcoes: ["Come verduras", "Não gosta de vegetais", "Prefere vegetais cozidos", "Não conversa"], resposta: 1, imagem: "", legendaImagem: "" },
+      { numero: 4, disciplina: "Língua Inglesa", descriptor: "Interpretar texto com auxílio de material gráfico", texto: "Na árvore genealógica apresentada, Charles Bernard é?", opcoes: ["Irmão de Emma", "Filho de Ava", "Avô de Amelie", "Pai de Brian"], resposta: 2, imagem: "", legendaImagem: "" },
+      { numero: 5, disciplina: "Geografia", descriptor: "Identificar características do sensoriamento remoto", texto: "O processo de obtenção de informações sem contato direto com a área mapeada é chamado de?", opcoes: ["Croqui", "Cartografia", "Técnicas cartográficas", "Sensoriamento remoto"], resposta: 3, imagem: "", legendaImagem: "" },
+      { numero: 6, disciplina: "Geografia", descriptor: "Reconhecer características do ponto de vista vertical", texto: "A visão que permite análise detalhada da distribuição dos elementos na paisagem é denominada?", opcoes: ["Horizontal", "Oblíqua", "Vertical", "Lateral"], resposta: 2, imagem: "", legendaImagem: "" },
+      { numero: 7, disciplina: "Língua Portuguesa", descriptor: "Distinguir fato de opinião", texto: "Em um texto sobre hospedagem com animais de estimação, qual trecho representa uma opinião?", opcoes: ["Colômbia tem 44% de hospedagens pet-friendly", "Quando se trata de viajar com os queridos companheiros de estimação", "Os cinco países com maior porcentagem de hóspedes", "Segundo a Airbnb, 27% dos anúncios"], resposta: 1, imagem: "", legendaImagem: "" },
+      { numero: 8, disciplina: "Língua Portuguesa", descriptor: "Interpretar texto com auxílio de material gráfico", texto: "Qual é a função do infográfico em um texto sobre desperdício de água?", opcoes: ["Acrescentar novo tema", "Questionar hipóteses", "Ensinar consertos hidráulicos", "Facilitar o acesso às informações"], resposta: 3, imagem: "", legendaImagem: "" },
+      { numero: 9, disciplina: "História", descriptor: "Compreender organização da sociedade asteca", texto: "Sobre a sociedade asteca, qual alternativa está correta?", opcoes: ["Camponeses realizavam rituais", "Comerciantes produziam alimentos", "Imperadores faziam trabalho braçal", "Sacerdotes eram funcionários do Estado"], resposta: 3, imagem: "", legendaImagem: "" },
+      { numero: 10, disciplina: "História", descriptor: "Reconhecer características da escrita egípcia", texto: "Sobre a escrita egípcia, pode-se afirmar que?", opcoes: ["Demótica retratava apenas animais", "Hieroglífica era usada em rituais religiosos", "Demótica era limitada aos camponeses", "Hieroglífica nunca foi traduzida"], resposta: 1, imagem: "", legendaImagem: "" },
+      { numero: 11, disciplina: "Ciências", descriptor: "Classificar substâncias puras e misturas", texto: "O gás ozônio, formado por 3 átomos de oxigênio, é classificado como?", opcoes: ["Substância pura heterogênea", "Mistura pura composta", "Substância pura simples", "Mistura heterogênea"], resposta: 2, imagem: "", legendaImagem: "" },
+      { numero: 12, disciplina: "Ciências", descriptor: "Reconhecer fatores de formação dos solos", texto: "O processo de desgaste da rocha que contribui para a formação dos solos é?", opcoes: ["Adubação", "Intemperismo", "Compostagem", "Evaporação"], resposta: 1, imagem: "", legendaImagem: "" }
+    ],
+    7: [
+      { numero: 1, disciplina: "Matemática", descriptor: "Resolver operações com números inteiros", texto: "Qual é o resultado de (-5) + 8 - 3?", opcoes: ["0", "1", "2", "3"], resposta: 1, imagem: "", legendaImagem: "" },
+      { numero: 2, disciplina: "Matemática", descriptor: "Calcular porcentagem", texto: "Qual é 25% de 200?", opcoes: ["25", "50", "75", "100"], resposta: 1, imagem: "", legendaImagem: "" },
+      { numero: 3, disciplina: "Língua Inglesa", descriptor: "Compreender textos em inglês", texto: "What is your name? - My name is _____", opcoes: ["Mary", "am Mary", "is Mary", "are Mary"], resposta: 0, imagem: "", legendaImagem: "" },
+      { numero: 4, disciplina: "Língua Inglesa", descriptor: "Identificar palavras em inglês", texto: "Qual palavra significa 'livro' em inglês?", opcoes: ["Pen", "Book", "Desk", "Door"], resposta: 1, imagem: "", legendaImagem: "" },
+      { numero: 5, disciplina: "Geografia", descriptor: "Identificar elementos climáticos", texto: "Qual é o principal fator que determina o clima de uma região?", opcoes: ["Vegetação", "Latitude", "População", "Arquitetura"], resposta: 1, imagem: "", legendaImagem: "" },
+      { numero: 6, disciplina: "Geografia", descriptor: "Compreender formação de relevos", texto: "As montanhas são formadas por processos de?", opcoes: ["Erosão apenas", "Erosão e deposição", "Deposição apenas", "Evaporação"], resposta: 1, imagem: "", legendaImagem: "" },
+      { numero: 7, disciplina: "Língua Portuguesa", descriptor: "Identificar classe de palavras", texto: "Em 'O menino corre rápido', qual é a função de 'rápido'?", opcoes: ["Nome", "Verbo", "Adjetivo", "Advérbio"], resposta: 3, imagem: "", legendaImagem: "" },
+      { numero: 8, disciplina: "Língua Portuguesa", descriptor: "Compreender figuras de linguagem", texto: "Em 'Seu coração é de pedra', temos que tipo de figura?", opcoes: ["Aliteração", "Metáfora", "Onomatopeia", "Hipérbole"], resposta: 1, imagem: "", legendaImagem: "" },
+      { numero: 9, disciplina: "História", descriptor: "Compreender feudalismo", texto: "O feudalismo era um sistema baseado em?", opcoes: ["Industrialização", "Relações senhor-vassalo", "Democracia", "Monarquia absoluta"], resposta: 1, imagem: "", legendaImagem: "" },
+      { numero: 10, disciplina: "História", descriptor: "Identificar períodos históricos", texto: "A Idade Média durou aproximadamente?", opcoes: ["500 a 1000 anos", "1000 a 1500 anos", "1500 a 2000 anos", "2000 a 2500 anos"], resposta: 1, imagem: "", legendaImagem: "" },
+      { numero: 11, disciplina: "Ciências", descriptor: "Compreender fotossíntese", texto: "Qual é o principal produto da fotossíntese?", opcoes: ["Dióxido de carbono", "Água", "Glicose", "Oxigênio"], resposta: 2, imagem: "", legendaImagem: "" },
+      { numero: 12, disciplina: "Ciências", descriptor: "Identificar tipos de energia", texto: "Qual é uma forma de energia renovável?", opcoes: ["Carvão mineral", "Petróleo", "Energia solar", "Gás natural"], resposta: 2, imagem: "", legendaImagem: "" }
+    ],
+    8: [
+      { numero: 1, disciplina: "Matemática", descriptor: "Resolver equações de primeiro grau", texto: "Qual é a solução de 2x + 5 = 13?", opcoes: ["2", "3", "4", "5"], resposta: 2, imagem: "", legendaImagem: "" },
+      { numero: 2, disciplina: "Matemática", descriptor: "Calcular área de figuras planas", texto: "Qual é a área de um quadrado com lado 5cm?", opcoes: ["10 cm²", "15 cm²", "20 cm²", "25 cm²"], resposta: 3, imagem: "", legendaImagem: "" },
+      { numero: 3, disciplina: "Língua Inglesa", descriptor: "Entender presente contínuo", texto: "Complete: I _____ playing football now.", opcoes: ["am", "is", "are", "be"], resposta: 0, imagem: "", legendaImagem: "" },
+      { numero: 4, disciplina: "Língua Inglesa", descriptor: "Identificar phrasal verbs", texto: "Complete: I _____ my homework yesterday.", opcoes: ["turn on", "turn up", "turned in", "turn down"], resposta: 2, imagem: "", legendaImagem: "" },
+      { numero: 5, disciplina: "Geografia", descriptor: "Entender tipos de clima", texto: "O clima tropical é caracterizado por?", opcoes: ["Temperaturas baixas", "Chuvas bem distribuídas", "Temperaturas altas e chuvas abundantes", "Secas prolongadas"], resposta: 2, imagem: "", legendaImagem: "" },
+      { numero: 6, disciplina: "Geografia", descriptor: "Compreender dinâmica populacional", texto: "O deslocamento de pessoas do campo para a cidade é chamado?", opcoes: ["Emigração", "Imigração", "Êxodo rural", "Migração internacional"], resposta: 2, imagem: "", legendaImagem: "" },
+      { numero: 7, disciplina: "Língua Portuguesa", descriptor: "Analisar estrutura textual", texto: "Qual é o principal objetivo de um texto informativo?", opcoes: ["Entreter", "Convencer", "Informar", "Emocionar"], resposta: 2, imagem: "", legendaImagem: "" },
+      { numero: 8, disciplina: "Língua Portuguesa", descriptor: "Compreender vícios de linguagem", texto: "Qual frase contém um exemplo de pleonasmo?", opcoes: ["Ela é muito inteligente", "Subir para cima", "A noite estava escura", "O menino correu rápido"], resposta: 1, imagem: "", legendaImagem: "" },
+      { numero: 9, disciplina: "História", descriptor: "Entender Renascimento", texto: "O Renascimento foi um movimento que ocorreu principalmente?", opcoes: ["Na Idade Média", "Na antiguidade clássica", "Nos séculos XV e XVI", "No século XX"], resposta: 2, imagem: "", legendaImagem: "" },
+      { numero: 10, disciplina: "História", descriptor: "Compreender Reforma Protestante", texto: "A Reforma Protestante começou com?", opcoes: ["Martinho Lutero", "João Calvino", "Henrique VIII", "Thomas Moro"], resposta: 0, imagem: "", legendaImagem: "" },
+      { numero: 11, disciplina: "Ciências", descriptor: "Entender transmissão de calor", texto: "Qual é um exemplo de condução térmica?", opcoes: ["Aquecedor elétrico", "Colher aquecendo na xícara", "Ar quente subindo", "Radiação solar"], resposta: 1, imagem: "", legendaImagem: "" },
+      { numero: 12, disciplina: "Ciências", descriptor: "Compreender reprodução assexuada", texto: "A reprodução por brotamento é um exemplo de?", opcoes: ["Reprodução sexuada", "Reprodução assexuada", "Evolução", "Mutação"], resposta: 1, imagem: "", legendaImagem: "" }
+    ],
+    9: [
+      { numero: 1, disciplina: "Matemática", descriptor: "Resolver sistema de equações", texto: "Qual é a solução do sistema x + y = 5 e x - y = 1?", opcoes: ["x=2, y=3", "x=3, y=2", "x=4, y=1", "x=1, y=4"], resposta: 1, imagem: "", legendaImagem: "" },
+      { numero: 2, disciplina: "Matemática", descriptor: "Calcular teorema de Pitágoras", texto: "Em um triângulo retângulo com catetos 3 e 4, qual é a hipotenusa?", opcoes: ["5", "6", "7", "8"], resposta: 0, imagem: "", legendaImagem: "" },
+      { numero: 3, disciplina: "Língua Inglesa", descriptor: "Entender condicional", texto: "Complete: If I _____ rich, I would travel.", opcoes: ["am", "was", "were", "been"], resposta: 2, imagem: "", legendaImagem: "" },
+      { numero: 4, disciplina: "Língua Inglesa", descriptor: "Compreender passive voice", texto: "A voz passiva de 'They built this house' é?", opcoes: ["This house was built", "This house is built", "This house are built", "Building this house"], resposta: 0, imagem: "", legendaImagem: "" },
+      { numero: 5, disciplina: "Geografia", descriptor: "Entender globalização", texto: "A globalização é caracterizada por?", opcoes: ["Isolamento de países", "Interconexão global", "Independência econômica", "Redução de comércio"], resposta: 1, imagem: "", legendaImagem: "" },
+      { numero: 6, disciplina: "Geografia", descriptor: "Compreender desenvolvimento sustentável", texto: "O desenvolvimento sustentável busca?", opcoes: ["Lucro máximo", "Equilíbrio econômico, social e ambiental", "Crescimento sem limite", "Proteção apenas ambiental"], resposta: 1, imagem: "", legendaImagem: "" },
+      { numero: 7, disciplina: "Língua Portuguesa", descriptor: "Analisar estilo de autor", texto: "A análise do estilo de um autor inclui?", opcoes: ["Apenas ortografia", "Sintaxe, vocabulário e recursos estilísticos", "Somente pontuação", "Apenas concordância"], resposta: 1, imagem: "", legendaImagem: "" },
+      { numero: 8, disciplina: "Língua Portuguesa", descriptor: "Compreender gênero textual", texto: "Um artigo de opinião é um texto que?", opcoes: ["Apenas informa", "Expõe argumentos pessoais", "Apenas entreté", "Apenas descreve"], resposta: 1, imagem: "", legendaImagem: "" },
+      { numero: 9, disciplina: "História", descriptor: "Entender Revolução Industrial", texto: "A Revolução Industrial começou?", opcoes: ["Na Itália", "Na Inglaterra", "Na França", "Na Alemanha"], resposta: 1, imagem: "", legendaImagem: "" },
+      { numero: 10, disciplina: "História", descriptor: "Compreender Guerra Fria", texto: "A Guerra Fria foi um conflito entre?", opcoes: ["EUA e URSS", "EUA e China", "Rússia e Europa", "Ásia e América"], resposta: 0, imagem: "", legendaImagem: "" },
+      { numero: 11, disciplina: "Ciências", descriptor: "Entender reações químicas", texto: "Em uma reação química, o que sempre ocorre?", opcoes: ["Mudança de estado", "Rearranjo de átomos", "Aumento de massa", "Diminuição de energia"], resposta: 1, imagem: "", legendaImagem: "" },
+      { numero: 12, disciplina: "Ciências", descriptor: "Compreender evolução", texto: "A seleção natural é um mecanismo da?", opcoes: ["Mutação", "Evolução", "Reprodução", "Adaptação"], resposta: 1, imagem: "", legendaImagem: "" }
+    ]
+  };
+
+  // ==================== LISTA COMPLETA DE ESCOLAS ====================
   const escolasOficiais = ["ADAIL JARBAS DUCLOS", "AFONSO MORENO", "ALADINO POLON", "ALBERTO GRAF CAPITAO","ALBINO FIORE","ALFRIED THEODOR WEISZFLOG","ANA MARIA GARRIDO ORLANDIN PROFA","APARECIDO ROBERTO TONELLOTTI PROFESSOR","ARMANDO SESTINI","ARTHUR WEINGRILL","AZEVEDO SOARES","BAIRRO DO ITAIM","BAIRRO JUNDIAIZINHO","BELEM DA SERRA","BENEDITO APARECIDO TAVARES PROF","BENEDITO FAGUNDES MARQUES","BUENO DE AZEVEDO FILHO PROF","CARLOS AUGUSTO DE PADUA FLEURY PROF","CELESTINA VALENTE LENGENFELDER PROFA","CHACARA CAMPONESA JARDIM VASSOURAS","DOMINGOS CAMBIAGHI PROF","DR. MARIO TOLEDO DE MORAES","DR. NELSON MANZANARES","ELCIO JOSE PEREIRA COTRIM PROF","ELVIRA PARADA MANGA PROFA","FRANCISCO GONCALVES VIEIRA PROF","HERMELINA DE ALBUQUERQUE PASSARELLA PROFA","IRACI SARTORI VIEIRA DA SILVA PROFA","ISAIAS LUIZ MATIAZZO","ISAURA DE MIRANDA BOTTO PROFA","ISAURA VALENTINI HANSER PROFA","IVONE DOS ANJOS DA SILVA CAMPOS PROFA","JARDIM ALEGRIA II","JARDIM DAS ROSAS","JARDIM SAO FRANCISCO","JARDIM SILVIA II","JOAQUIM MARQUES DA SILVA SOBRINHO TTE","JOCIMARA VIEIRA DA SILVA PROFA","JOSE CARLOS DA SILVA JUNIOR","JOSE DE BARROS MARTINS EDITOR","JOSE PARADA PROFESSOR","JOSE ROBERTO MELCHIOR DR","KATIA MARIA TARIFA LEME TONELLI PROFA","LENITA CORREA CAMARGO PROFA","LUIZ ALEXANDRE DOS SANTOS VEREADOR","LYDIA SCALET WALKER PROFA","MARIA ZEZA GOMES DE OLIVEIRA","NAIR HANNICKEL ROMARO","NIDE ZAIM CARDOSO PROFA","ODARICO OLIVEIRA NASCIMENTO PROF","OLINDO DARTORA DR","OTTO WEISZFLOG","OZILDE ALBUQUERQUE PASSARELLA DR","PARQUE CENTO E VINTE II","PAULO DUARTE","PEDRO GALRAO DO NASCIMENTO","PEDRO LELIS DE SOUZA PREFEITO","PEDRO PAULO DE AGUIAR","PIETRO PETRI","RITUCO MITANI PROFA","ROGERIO LEVORIN PROF","SUZANA DIAS","ULYSSES SANCHES RAMIRES PROF","VINCENZO LOBASSI","WALTER RIBAS DE ANDRADE PROF EE","WALTHER WEISZFLOG","ZILTON BICUDO PROF"];
 
+  // ==================== VARIÁVEIS GLOBAIS ====================
   let questoesAtuais = [], respostas = [], questaoAtual = 0, timerInterval, tempoRestante = 120;
+  let turmaSelecionada = null;
 
   function showToast(msg, isError = false) {
     const t = document.getElementById('toast');
     t.innerText = msg;
     t.style.background = isError ? '#b91c1c' : '#1f2937';
     t.style.display = 'block';
-    setTimeout(() => { t.style.display = 'none'; t.style.background = '#1f2937'; }, 4000);
+    setTimeout(() => t.style.display = 'none', 4000);
   }
 
-  function inicializarDropdowns() {
-    [document.getElementById('rEscola'), document.getElementById('dashEscola')].forEach(sel => {
-      if(sel) { sel.innerHTML = '<option value="">Selecione a Escola</option>'; escolasOficiais.forEach(e => sel.innerHTML += `<option value="${e}">${e}</option>`); }
+  function escapeHtml(str) {
+    if(!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+      if(m === '&') return '&amp;';
+      if(m === '<') return '&lt;';
+      if(m === '>') return '&gt;';
+      return m;
     });
   }
 
-  // ==================== REGISTROS DA TURMA (COM EDIÇÃO) ====================
+  // ==================== INICIALIZAR DROPDOWNS DE ESCOLA ====================
+  function inicializarDropdowns() {
+    [document.getElementById('rEscola'), document.getElementById('dashEscola')].forEach(sel => {
+      if(sel) {
+        sel.innerHTML = '<option value="">Selecione a Escola</option>';
+        escolasOficiais.forEach(e => sel.innerHTML += `<option value="${e}">${e}</option>`);
+      }
+    });
+  }
+
+  // ==================== CARREGAR TURMAS NO SELECT DO QUIZ ====================
+  async function carregarTurmasNoSelect() {
+    const select = document.getElementById('quizTurmaId');
+    select.innerHTML = '<option value="">Carregando...</option>';
+    try {
+      const snap = await db.collection('quiz_registros').orderBy('timestamp', 'desc').get();
+      if(snap.empty) {
+        select.innerHTML = '<option value="">Nenhuma turma registrada. Vá em "Registros" primeiro.</option>';
+        return;
+      }
+      let options = '<option value="">Selecione a turma</option>';
+      snap.forEach(doc => {
+        const d = doc.data();
+        options += `<option value="${doc.id}">${escapeHtml(d.escola)} - ${escapeHtml(d.anoSerie)} ${escapeHtml(d.turma)} (${escapeHtml(d.professor)})</option>`;
+      });
+      select.innerHTML = options;
+    } catch(e) {
+      select.innerHTML = '<option value="">Erro ao carregar turmas</option>';
+    }
+  }
+
+  // ==================== REGISTROS CRUD ====================
   document.getElementById('registroTurmaForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const editandoId = document.getElementById('editandoRegistroId').value;
@@ -198,117 +281,136 @@
       observacoes: document.getElementById('rObservacoes').value,
       status: 'Registrado'
     };
-    if(!editandoId) dados.timestamp = firebase.firestore.FieldValue.serverTimestamp();
+    if(!dados.escola || !dados.anoSerie || !dados.turma || !dados.periodo || !dados.professor) {
+      showToast('Preencha todos os campos obrigatórios!', true);
+      return;
+    }
     try {
       if(editandoId) {
         await db.collection('quiz_registros').doc(editandoId).update(dados);
-        showToast('✅ Turma atualizada com sucesso!');
+        showToast('✅ Turma atualizada!');
       } else {
-        dados.timestamp = firebase.firestore.FieldValue.serverTimestamp();
-        await db.collection('quiz_registros').add(dados);
-        showToast('✅ Turma registrada com sucesso!');
+        await db.collection('quiz_registros').add({...dados, timestamp: firebase.firestore.FieldValue.serverTimestamp()});
+        showToast('✅ Turma registrada!');
       }
       document.getElementById('registroTurmaForm').reset();
       document.getElementById('editandoRegistroId').value = '';
       carregarRegistros();
-    } catch(err) { showToast('❌ Erro ao salvar: '+err.message, true); }
+      carregarTurmasNoSelect();
+      atualizarDashboard();
+    } catch(err) { showToast('Erro: '+err.message, true); }
   });
 
   async function carregarRegistros() {
     try {
       const snap = await db.collection('quiz_registros').orderBy('timestamp', 'desc').get();
-      document.getElementById('registrosTableBody').innerHTML = snap.docs.map(doc => {
+      const tbody = document.getElementById('registrosTableBody');
+      if(snap.empty) {
+        tbody.innerHTML = '<tr><td colspan="7">Nenhuma turma registrada.您</td></tr>';
+        return;
+      }
+      let html = '';
+      snap.forEach(doc => {
         const d = doc.data();
-        return `<tr>
-          <td>${d.escola}</td>
-          <td>${d.anoSerie}</td>
-          <td>${d.turma}</td>
-          <td>${d.periodo}</td>
-          <td>${d.professor}</td>
-          <td>${d.observacoes || '-'}</td>
-          <td><button class="btn" onclick="editarRegistro('${doc.id}')" style="padding:4px 8px"><i class="fas fa-edit"></i></button>
+        html += `<tr>
+          <td data-label="Escola">${escapeHtml(d.escola)}</td>
+          <td data-label="Ano">${escapeHtml(d.anoSerie)}</td>
+          <td data-label="Turma">${escapeHtml(d.turma)}</td>
+          <td data-label="Período">${escapeHtml(d.periodo)}</td>
+          <td data-label="Professor">${escapeHtml(d.professor)}</td>
+          <td data-label="Obs">${escapeHtml(d.observacoes || '-')}</td>
+          <td data-label="Ações">
+            <button class="btn" onclick="editarRegistro('${doc.id}')" style="padding:4px 8px"><i class="fas fa-edit"></i></button>
             <button class="btn btn-danger" onclick="excluirRegistro('${doc.id}')" style="padding:4px 8px"><i class="fas fa-trash"></i></button>
           </td>
-        `;
-      }).join('');
+        </tr>`;
+      });
+      tbody.innerHTML = html;
     } catch(err) { showToast('Erro ao carregar registros', true); }
   }
 
-  async function editarRegistro(id) {
-    try {
-      const doc = await db.collection('quiz_registros').doc(id).get();
-      if(!doc.exists) return;
-      const d = doc.data();
-      document.getElementById('rEscola').value = d.escola;
-      document.getElementById('rAnoSerie').value = d.anoSerie;
-      document.getElementById('rTurma').value = d.turma;
-      document.getElementById('rPeriodo').value = d.periodo;
-      document.getElementById('rProfessor').value = d.professor;
-      document.getElementById('rObservacoes').value = d.observacoes || '';
-      document.getElementById('editandoRegistroId').value = id;
-      showToast('Editando registro. Clique em Salvar para atualizar.');
-    } catch(err) { showToast('Erro ao carregar registro: '+err.message, true); }
-  }
-
-  async function excluirRegistro(id) {
-    if(!confirm('Excluir permanentemente este registro?')) return;
-    try {
+  window.editarRegistro = async (id) => {
+    const doc = await db.collection('quiz_registros').doc(id).get();
+    const d = doc.data();
+    document.getElementById('rEscola').value = d.escola;
+    document.getElementById('rAnoSerie').value = d.anoSerie;
+    document.getElementById('rTurma').value = d.turma;
+    document.getElementById('rPeriodo').value = d.periodo;
+    document.getElementById('rProfessor').value = d.professor;
+    document.getElementById('rObservacoes').value = d.observacoes || '';
+    document.getElementById('editandoRegistroId').value = id;
+    showToast('Editando. Salve para atualizar.');
+  };
+  window.excluirRegistro = async (id) => {
+    if(confirm('Excluir permanentemente esta turma?')) {
       await db.collection('quiz_registros').doc(id).delete();
-      showToast('🗑️ Registro excluído');
       carregarRegistros();
-    } catch(err) { showToast('Erro ao excluir: '+err.message, true); }
-  }
+      carregarTurmasNoSelect();
+      atualizarDashboard();
+      showToast('Excluído');
+    }
+  };
 
   // ==================== QUIZ ====================
-  async function iniciarQuiz() {
-    const ano = document.getElementById('quizAnoSerie').value;
-    if(!ano) { showToast('❌ Selecione um ano!', true); return; }
-    try {
-      const qSnap = await db.collection('quiz_questoes').where('ano', '==', parseInt(ano)).orderBy('numero').get();
-      if(qSnap.empty) { showToast('❌ Nenhuma questão cadastrada para este ano! Acesse "Gerenciar Questões".', true); return; }
-      questoesAtuais = qSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      respostas = new Array(questoesAtuais.length).fill(null);
-      questaoAtual = 0;
-      tempoRestante = 120;
-      document.getElementById('quizArea').style.display = 'block';
-      document.getElementById('quizTitulo').innerText = `Quiz - ${ano}° Ano`;
-      mostrarQuestao();
-      iniciarTimer();
-    } catch(err) { showToast('Erro ao carregar questões: '+err.message, true); }
-  }
+  window.iniciarQuiz = async () => {
+    const turmaId = document.getElementById('quizTurmaId').value;
+    if(!turmaId) { showToast('Selecione uma turma registrada!', true); return; }
+    const ano = parseInt(document.getElementById('quizAnoSerie').value);
+    if(!ano) { showToast('Selecione o ano!', true); return; }
+    const docTurma = await db.collection('quiz_registros').doc(turmaId).get();
+    if(!docTurma.exists) { showToast('Turma não encontrada', true); return; }
+    turmaSelecionada = { id: turmaId, ...docTurma.data() };
+    const questoes = questoesPorAno[ano];
+    if(!questoes) { showToast('Questões não encontradas para este ano', true); return; }
+    questoesAtuais = [...questoes];
+    respostas = new Array(questoesAtuais.length).fill(null);
+    questaoAtual = 0;
+    tempoRestante = 120;
+    document.getElementById('quizArea').style.display = 'block';
+    document.getElementById('resultadoFinal').style.display = 'none';
+    document.getElementById('quizTitulo').innerHTML = `${escapeHtml(turmaSelecionada.escola)} - ${escapeHtml(turmaSelecionada.anoSerie)} ${escapeHtml(turmaSelecionada.turma)}`;
+    mostrarQuestao();
+    iniciarTimer();
+  };
 
   function mostrarQuestao() {
     const q = questoesAtuais[questaoAtual];
-    let html = `<div class="question-section"><div class="question-number">Questão ${q.numero} de ${questoesAtuais.length}</div><div class="question-descriptor">📌 Descritor: ${q.descriptor}</div><div class="question-descriptor">Disciplina: <strong>${q.disciplina}</strong></div><div class="question-text">${q.texto}</div>`;
-    if(q.imagem && q.imagem.trim()) html += `<div><img src="${q.imagem}" class="question-image" alt="Imagem" onerror="this.style.display='none'"></div>`;
+    let html = `<div class="question-section"><div class="question-number">Questão ${q.numero} de ${questoesAtuais.length}</div>
+    <div class="question-descriptor">📌 Descritor: ${escapeHtml(q.descriptor)}</div>
+    <div class="question-descriptor">Disciplina: <strong>${escapeHtml(q.disciplina)}</strong></div>
+    <div class="question-text">${escapeHtml(q.texto)}</div>`;
+    if(q.imagem && q.imagem.trim()) {
+      html += `<div class="imagem-container"><img src="${q.imagem}" class="question-image" alt="Imagem" onerror="this.style.display='none'">`;
+      if(q.legendaImagem && q.legendaImagem.trim()) html += `<div class="legenda-imagem">${escapeHtml(q.legendaImagem)}</div>`;
+      html += `</div>`;
+    }
     html += `<div class="option-group">`;
     q.opcoes.forEach((opcao, idx) => {
       const checked = respostas[questaoAtual] === idx ? 'checked' : '';
-      html += `<div class="option"><input type="radio" id="opcao${idx}" name="resposta" value="${idx}" ${checked} onchange="selecionarResposta(${idx})"><label for="opcao${idx}">${String.fromCharCode(65+idx)}) ${opcao}</label></div>`;
+      html += `<div class="option"><input type="radio" id="opcao${idx}" name="resposta" value="${idx}" ${checked} onchange="selecionarResposta(${idx})"><label for="opcao${idx}">${String.fromCharCode(65+idx)}) ${escapeHtml(opcao)}</label></div>`;
     });
     html += `</div>`;
     if(respostas[questaoAtual] !== undefined && respostas[questaoAtual] !== null) {
       const acertou = respostas[questaoAtual] === q.resposta;
       const respostaCorreta = q.opcoes[q.resposta];
-      html += `<div class="feedback-box ${acertou ? '' : 'incorrect'}"><i class="fas ${acertou ? 'fa-check-circle' : 'fa-times-circle'}"></i> <strong>${acertou ? 'Correto!' : 'Você errou!'}</strong><div class="correct-answer">✅ Resposta correta: ${String.fromCharCode(65+q.resposta)}) ${respostaCorreta}</div></div>`;
+      html += `<div class="feedback-box ${acertou ? '' : 'incorrect'}"><i class="fas ${acertou ? 'fa-check-circle' : 'fa-times-circle'}"></i> <strong>${acertou ? 'Correto!' : 'Você errou!'}</strong><div class="correct-answer">✅ Resposta correta: ${String.fromCharCode(65+q.resposta)}) ${escapeHtml(respostaCorreta)}</div></div>`;
     }
     html += `</div>`;
     document.getElementById('questaoContainer').innerHTML = html;
     atualizarBotoes();
-    document.getElementById('progresso').innerText = `Questão ${questaoAtual+1} de ${questoesAtuais.length}`;
+    document.getElementById('progresso').innerHTML = `Questão ${questaoAtual+1} de ${questoesAtuais.length}`;
   }
 
-  function selecionarResposta(idx) {
+  window.selecionarResposta = (idx) => {
     if(respostas[questaoAtual] !== undefined && respostas[questaoAtual] !== null) return;
     respostas[questaoAtual] = idx;
     mostrarQuestao();
-  }
-
-  function questaoProxima() {
-    if(respostas[questaoAtual] === undefined || respostas[questaoAtual] === null) { showToast('⚠️ Responda a questão antes de avançar!', true); return; }
+  };
+  window.questaoProxima = () => {
+    if(respostas[questaoAtual] === undefined || respostas[questaoAtual] === null) { showToast('Responda antes de avançar', true); return; }
     if(questaoAtual < questoesAtuais.length-1) { questaoAtual++; mostrarQuestao(); }
-  }
-  function questaoAnterior() { if(questaoAtual > 0) { questaoAtual--; mostrarQuestao(); } }
+  };
+  window.questaoAnterior = () => { if(questaoAtual > 0) { questaoAtual--; mostrarQuestao(); } };
   function atualizarBotoes() {
     document.getElementById('btnAnterior').style.display = questaoAtual > 0 ? 'inline-flex' : 'none';
     document.getElementById('btnProxima').style.display = questaoAtual < questoesAtuais.length-1 ? 'inline-flex' : 'none';
@@ -324,152 +426,183 @@
         clearInterval(timerInterval);
         if(questaoAtual < questoesAtuais.length-1) questaoProxima();
         else finalizarQuiz();
-        tempoRestante = 120;
-        iniciarTimer();
       }
     }, 1000);
   }
-  async function finalizarQuiz() {
+  window.finalizarQuiz = async () => {
     clearInterval(timerInterval);
     let acertos = 0;
     questoesAtuais.forEach((q,idx) => { if(respostas[idx] === q.resposta) acertos++; });
-    const percentual = Math.round((acertos/questoesAtuais.length)*100);
-    await db.collection('quiz_resultados').add({ ano: `${document.getElementById('quizAnoSerie').value}° Ano`, acertos, total: questoesAtuais.length, percentual, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
-    showToast(`✅ Quiz finalizado! Acertos: ${acertos}/${questoesAtuais.length} (${percentual}%)`);
+    const total = questoesAtuais.length;
+    const percentual = Math.round((acertos/total)*100);
+    await db.collection('quiz_resultados').add({
+      turmaId: turmaSelecionada.id,
+      escola: turmaSelecionada.escola,
+      anoSerie: turmaSelecionada.anoSerie,
+      turma: turmaSelecionada.turma,
+      professor: turmaSelecionada.professor,
+      periodo: turmaSelecionada.periodo,
+      acertos, total, percentual,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    const divResultado = document.getElementById('resultadoFinal');
+    divResultado.style.display = 'block';
+    divResultado.innerHTML = `
+      <h2><i class="fas fa-chart-line"></i> Desempenho da Turma</h2>
+      <p style="font-size:1.8rem; font-weight:800;">${acertos}/${total} acertos</p>
+      <p>Percentual de acertos: <strong>${percentual}%</strong></p>
+      <div style="background:#e0e0e0; border-radius:20px; height:20px; width:100%; margin:15px 0;"><div style="width:${percentual}%; background:#22c55e; height:20px; border-radius:20px;"></div></div>
+      <button class="btn btn-success" onclick="gerarCertificado(${acertos}, ${total}, ${percentual})"><i class="fas fa-award"></i> 🎓 Gerar Certificado de Participação</button>
+    `;
     document.getElementById('quizArea').style.display = 'none';
+    atualizarDashboard();
+  };
+
+  // ==================== CERTIFICADO ====================
+  function gerarCertificadoComDados(turmaData, acertos, total, percentual) {
+    const dataAtual = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+    const mensagens = [
+      "Parabéns! Esta turma demonstrou dedicação e esforço na preparação para o SARESP 2026. Cada questão respondida é um passo rumo ao sucesso! 🌟",
+      "Vocês são incríveis! O desempenho alcançado reflete o compromisso com a aprendizagem. Continuem assim, o SARESP 2026 será apenas mais uma conquista! 🚀",
+      "A educação transforma vidas. Esta turma mostrou que está no caminho certo. Com foco e determinação, o SARESP 2026 será um grande momento de celebração! 📚",
+      "Grandes resultados nascem de pequenos esforços diários. Parabéns pelo empenho! O SARESP 2026 aguarda por vocês com confiança e esperança. 💪",
+      "Saber é poder, e vocês estão cada vez mais poderosos! O desempenho no quiz é prova de que a aprovação no SARESP 2026 é questão de tempo. ✨",
+      "Turma nota 10! Esse engajamento mostra que o futuro da educação está em boas mãos. Continuem praticando, o SARESP 2026 será o palco do seu brilho! 🎓"
+    ];
+    const mensagem = mensagens[Math.floor(Math.random() * mensagens.length)];
+    const estrelas = () => {
+      const nivel = Math.floor(percentual / 20);
+      return '★'.repeat(nivel) + '☆'.repeat(5 - nivel);
+    };
+
+    const htmlCertificado = `
+      <div style="font-family: 'Playfair Display', 'Times New Roman', serif; max-width: 800px; margin: 0 auto; background: #fffcf5; border: 18px double #d32f2f; border-radius: 32px; padding: 30px 25px; text-align: center; box-shadow: 0 20px 35px rgba(0,0,0,0.3); position: relative;">
+        <div style="position: absolute; top: 20px; left: 20px; opacity: 0.2;"><i class="fas fa-award" style="font-size: 80px; color: #d32f2f;"></i></div>
+        <div style="position: absolute; bottom: 20px; right: 20px; opacity: 0.2;"><i class="fas fa-graduation-cap" style="font-size: 80px; color: #d32f2f;"></i></div>
+        <div style="margin-bottom: 15px;"><img src="https://i.ibb.co/0p01LzxB/logo3de.jpg" style="height: 80px; width: auto; background: white; border-radius: 20px; padding: 5px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"></div>
+        <div style="border-bottom: 2px solid #d32f2f; display: inline-block; padding-bottom: 10px; margin-bottom: 20px;">
+          <h1 style="color: #0a2f6c; font-size: 34px; margin: 0; letter-spacing: 2px;">CERTIFICADO DE PARTICIPAÇÃO</h1>
+        </div>
+        <h3 style="color: #d32f2f; font-size: 20px; margin-top: -5px; font-weight: normal;">SARESP 2026 – Quiz Preparatório</h3>
+        <p style="font-size: 18px; margin-top: 25px;">Certificamos que a turma</p>
+        <h2 style="font-size: 28px; margin: 10px 0 5px; color: #0a2f6c;">${escapeHtml(turmaData.escola)}</h2>
+        <p style="font-size: 20px; font-weight: bold;">${escapeHtml(turmaData.anoSerie)} – Turma ${escapeHtml(turmaData.turma)}</p>
+        <p style="font-size: 16px;">Período: ${escapeHtml(turmaData.periodo)}<br>Professor(a): ${escapeHtml(turmaData.professor)}</p>
+        <div style="background: linear-gradient(145deg, #f0f4fc, #e6edf9); border-radius: 28px; padding: 20px; margin: 25px 0; border: 1px solid #cbd5e1;">
+          <p style="font-size: 20px; font-weight: bold; color: #0a2f6c;">🎯 Desempenho no Quiz</p>
+          <div style="display: flex; justify-content: center; align-items: baseline; gap: 15px; flex-wrap: wrap; margin: 15px 0;">
+            <span style="font-size: 52px; font-weight: 800; color: #d32f2f;">${acertos}/${total}</span>
+            <span style="font-size: 24px; color: #0a2f6c;">acertos</span>
+          </div>
+          <p style="font-size: 20px;">Percentual de acertos: <strong style="font-size: 28px; color: #22c55e;">${percentual}%</strong></p>
+          <div style="background: #e0e0e0; border-radius: 20px; height: 20px; width: 80%; margin: 10px auto; overflow: hidden;">
+            <div style="width: ${percentual}%; background: #22c55e; height: 20px; border-radius: 20px;"></div>
+          </div>
+          <p style="font-size: 24px; letter-spacing: 5px; margin-top: 10px;">${estrelas()}</p>
+        </div>
+        <div style="background: #fff4e6; border-left: 6px solid #d32f2f; padding: 15px 20px; border-radius: 20px; margin: 20px 0;">
+          <p style="font-size: 18px; font-style: italic; color: #2c3e66;">“${mensagem}”</p>
+        </div>
+        <p style="margin-top: 25px; font-size: 16px;"><i class="fas fa-calendar-alt"></i> Emitido em: ${dataAtual}</p>
+        <div style="display: flex; justify-content: space-between; margin-top: 35px; padding-top: 15px; border-top: 1px solid #ccc;">
+          <div style="text-align: center; flex:1;"><p style="font-weight: bold;">_________________________</p><p style="font-size: 14px;">Coordenador(a) Pedagógico(a)</p></div>
+          <div style="text-align: center; flex:1;"><p style="font-weight: bold;">_________________________</p><p style="font-size: 14px;">Diretor(a) da URE-CAIEIRAS</p></div>
+        </div>
+        <p style="font-size: 12px; margin-top: 25px; color: #6c757d;">Este certificado é uma homenagem ao esforço da turma na preparação para o SARESP 2026. Continue praticando e acreditando no seu potencial!</p>
+      </div>
+    `;
+    const element = document.createElement('div');
+    element.innerHTML = htmlCertificado;
+    document.body.appendChild(element);
+    html2pdf().set({
+      margin: 0.4,
+      filename: `Certificado_SARESP_${turmaData.escola}_${turmaData.anoSerie}_${turmaData.turma}.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, letterRendering: true, useCORS: true },
+      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+    }).from(element).save().then(() => {
+      document.body.removeChild(element);
+    }).catch(err => console.error('Erro ao gerar PDF:', err));
   }
 
-  // ==================== DASHBOARD ====================
-  async function atualizarDashboard() {
-    let ref = db.collection('quiz_registros');
-    const escola = document.getElementById('dashEscola').value, anoSerie = document.getElementById('dashAnoSerie').value, turma = document.getElementById('dashTurma').value, periodo = document.getElementById('dashPeriodo').value;
-    if(escola) ref = ref.where('escola','==',escola);
-    if(anoSerie) ref = ref.where('anoSerie','==',anoSerie);
-    if(turma) ref = ref.where('turma','==',turma);
-    if(periodo) ref = ref.where('periodo','==',periodo);
-    const snap = await ref.get();
-    document.getElementById('dashTableBody').innerHTML = snap.docs.map(doc => `<tr><td>${doc.data().escola}</td><td>${doc.data().anoSerie}</td><td>${doc.data().turma}</td><td>${doc.data().periodo}</td><td>${doc.data().professor}</td><td>${doc.data().timestamp ? new Date(doc.data().timestamp.toDate()).toLocaleString() : '-'}</td><td><span class="badge bg-verde">${doc.data().status}</span></td>`).join('');
-    document.getElementById('kpiTotalTurmas').innerText = snap.size;
-  }
-  function gerarPDFDashboard() { html2pdf().set({margin:10,filename:'Dashboard_Quiz.pdf',image:{type:'jpeg',quality:0.98},html2canvas:{scale:2},jsPDF:{orientation:'landscape',unit:'mm',format:'a4'}}).from(document.querySelector('.main-container')).save(); }
+  window.gerarCertificado = (acertos, total, percentual) => {
+    if (!turmaSelecionada) { showToast('Nenhuma turma selecionada.', true); return; }
+    gerarCertificadoComDados(turmaSelecionada, acertos, total, percentual);
+  };
 
-  // ==================== GERENCIAR QUESTÕES ====================
-  function gerarOpcoesInputs() {
-    let html = '';
-    for(let i=0;i<4;i++) html += `<div class="opcao-item"><span>${String.fromCharCode(65+i)})</span><input type="text" id="opcao${i}" placeholder="Alternativa ${String.fromCharCode(65+i)}" required></div>`;
-    document.getElementById('opcoesContainer').innerHTML = html;
-  }
-
-  document.getElementById('questaoForm')?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const btn = document.getElementById('btnSalvarQuestao');
-    const originalText = btn.innerHTML;
-    btn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Salvando...';
-    btn.disabled = true;
+  window.gerarCertificadoFromDashboard = async (turmaId) => {
+  try {
+    const turmaDoc = await db.collection('quiz_registros').doc(turmaId).get();
+    if (!turmaDoc.exists) { showToast('Turma não encontrada.', true); return; }
+    const turmaData = turmaDoc.data();
     
-    const ano = parseInt(document.getElementById('qAno').value);
-    const numero = parseInt(document.getElementById('qNumero').value);
-    const disciplina = document.getElementById('qDisciplina').value;
-    const descriptor = document.getElementById('qDescriptor').value;
-    const texto = document.getElementById('qTexto').value;
-    const imagem = document.getElementById('qImagem').value || '';
-    const opcoes = [0,1,2,3].map(i => document.getElementById(`opcao${i}`).value);
-    const resposta = parseInt(document.getElementById('qResposta').value);
-    const editandoId = document.getElementById('editandoId').value;
-    
-    if(!ano || !numero || !disciplina || !descriptor || !texto || opcoes.some(o => !o.trim()) || isNaN(resposta)) {
-      showToast('Preencha todos os campos corretamente!', true);
-      btn.innerHTML = originalText;
-      btn.disabled = false;
+    // Buscar todos os resultados da turma (sem orderBy)
+    const resultadosSnap = await db.collection('quiz_resultados')
+      .where('turmaId', '==', turmaId)
+      .get();
+      
+    if (resultadosSnap.empty) {
+      showToast(`A turma ${turmaData.turma} ainda não realizou o quiz.`, true);
       return;
     }
     
-    const dados = { ano, numero, disciplina, descriptor, texto, imagem, opcoes, resposta };
+    // Ordenar manualmente pelo timestamp (decrescente) e pegar o primeiro
+    const resultados = resultadosSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    resultados.sort((a, b) => {
+      const tA = a.timestamp?.toDate() || new Date(0);
+      const tB = b.timestamp?.toDate() || new Date(0);
+      return tB - tA;
+    });
+    const ultimo = resultados[0];
     
-    try {
-      if(editandoId) {
-        await db.collection('quiz_questoes').doc(editandoId).update(dados);
-        showToast('✅ Questão atualizada com sucesso!');
-      } else {
-        await db.collection('quiz_questoes').add(dados);
-        showToast('✅ Questão cadastrada com sucesso!');
-      }
-      limparFormQuestao();
-      carregarQuestoes();
-      document.getElementById('formStatus').innerHTML = '<span style="color:green">✔ Operação realizada com sucesso.</span>';
-      setTimeout(() => document.getElementById('formStatus').innerHTML = '', 3000);
-    } catch(err) {
-      console.error(err);
-      showToast('❌ Erro ao salvar: ' + err.message, true);
-      document.getElementById('formStatus').innerHTML = `<span style="color:red">❌ Erro: ${err.message}</span>`;
-    } finally {
-      btn.innerHTML = originalText;
-      btn.disabled = false;
-    }
-  });
-  
-  async function carregarQuestoes() {
-    const tbody = document.getElementById('questoesTableBody');
-    tbody.innerHTML = '<tr><td colspan="7" class="loading">Carregando questões...</td></tr>';
-    try {
-      let query = db.collection('quiz_questoes');
-      const filtro = document.getElementById('filtroAnoLista').value;
-      if(filtro) query = query.where('ano', '==', parseInt(filtro));
-      const snap = await query.orderBy('ano').orderBy('numero').get();
-      if(snap.empty) {
-        tbody.innerHTML = '<tr><td colspan="7">Nenhuma questão cadastrada. Adicione uma acima.</td></tr>';
-        return;
-      }
-      tbody.innerHTML = snap.docs.map(doc => {
-        const d = doc.data();
-        return `<tr>
-          <td>${d.ano}° Ano</td><td>${d.numero}</td><td>${d.disciplina}</td><td>${d.descriptor}</td><td>${d.texto.substring(0,50)}...</td>
-          <td>${d.imagem ? '<i class="fas fa-image"></i>' : '-'}</td>
-          <td><button class="btn" onclick="editarQuestao('${doc.id}')" style="padding:4px 8px"><i class="fas fa-edit"></i></button> <button class="btn btn-danger" onclick="excluirQuestao('${doc.id}')" style="padding:4px 8px"><i class="fas fa-trash"></i></button></td>
-        `;
-      }).join('');
-    } catch(err) {
-      console.error(err);
-      tbody.innerHTML = `<tr><td colspan="7">Erro ao carregar questões: ${err.message}</td></tr>`;
-      showToast('Erro ao carregar questões do Firestore. Verifique as regras de segurança.', true);
-    }
+    gerarCertificadoComDados(turmaData, ultimo.acertos, ultimo.total, ultimo.percentual);
+  } catch(err) {
+    showToast('Erro ao gerar certificado: '+err.message, true);
   }
-  
-  async function editarQuestao(id) {
-    try {
-      const doc = await db.collection('quiz_questoes').doc(id).get();
-      if(!doc.exists) return;
-      const d = doc.data();
-      document.getElementById('qAno').value = d.ano;
-      document.getElementById('qNumero').value = d.numero;
-      document.getElementById('qDisciplina').value = d.disciplina;
-      document.getElementById('qDescriptor').value = d.descriptor;
-      document.getElementById('qTexto').value = d.texto;
-      document.getElementById('qImagem').value = d.imagem || '';
-      for(let i=0;i<4;i++) document.getElementById(`opcao${i}`).value = d.opcoes[i];
-      document.getElementById('qResposta').value = d.resposta;
-      document.getElementById('editandoId').value = id;
-      showToast('Carregando questão para edição...');
-    } catch(err) { showToast('Erro ao carregar questão: '+err.message, true); }
-  }
-  
-  async function excluirQuestao(id) {
-    if(!confirm('Tem certeza que deseja excluir esta questão permanentemente?')) return;
-    try {
-      await db.collection('quiz_questoes').doc(id).delete();
-      showToast('🗑️ Questão excluída com sucesso.');
-      carregarQuestoes();
-    } catch(err) { showToast('Erro ao excluir: '+err.message, true); }
-  }
-  
-  function limparFormQuestao() {
-    document.getElementById('questaoForm').reset();
-    document.getElementById('editandoId').value = '';
-    gerarOpcoesInputs();
-    document.getElementById('formStatus').innerHTML = '';
-  }
+};
 
-  // Abas
+  // ==================== DASHBOARD ====================
+  window.atualizarDashboard = async () => {
+    try {
+      let ref = db.collection('quiz_registros');
+      const escola = document.getElementById('dashEscola').value;
+      const anoSerie = document.getElementById('dashAnoSerie').value;
+      const turma = document.getElementById('dashTurma').value;
+      const periodo = document.getElementById('dashPeriodo').value;
+      if(escola) ref = ref.where('escola','==',escola);
+      if(anoSerie) ref = ref.where('anoSerie','==',anoSerie);
+      if(turma) ref = ref.where('turma','==',turma);
+      if(periodo) ref = ref.where('periodo','==',periodo);
+      const snap = await ref.get();
+      const tbodyDash = document.getElementById('dashTableBody');
+      if(snap.empty) {
+        tbodyDash.innerHTML = '<tr><td colspan="7">Nenhum registro encontrado.</td></tr>';
+      } else {
+        let html = '';
+        for (const doc of snap.docs) {
+          const d = doc.data();
+          html += `<tr>
+            <td data-label="Escola">${escapeHtml(d.escola)}</td>
+            <td data-label="Ano">${escapeHtml(d.anoSerie)}</td>
+            <td data-label="Turma">${escapeHtml(d.turma)}</td>
+            <td data-label="Período">${escapeHtml(d.periodo)}</td>
+            <td data-label="Professor">${escapeHtml(d.professor)}</td>
+            <td data-label="Data Registro">${d.timestamp ? new Date(d.timestamp.toDate()).toLocaleString() : '-'}</td>
+            <td data-label="Certificado"><button class="btn btn-success" onclick="gerarCertificadoFromDashboard('${doc.id}')" style="padding:4px 12px"><i class="fas fa-award"></i> Certificado</button></td>
+          </tr>`;
+        }
+        tbodyDash.innerHTML = html;
+      }
+      document.getElementById('kpiTotalTurmas').innerText = snap.size;
+      const resSnap = await db.collection('quiz_resultados').get();
+      document.getElementById('kpiQuizRealizados').innerText = resSnap.size;
+    } catch(err) { showToast('Erro no dashboard', true); }
+  };
+  window.gerarPDFDashboard = () => {
+    html2pdf().set({margin:10,filename:'Dashboard_Quiz.pdf',image:{type:'jpeg',quality:0.98},html2canvas:{scale:2},jsPDF:{orientation:'landscape',unit:'mm',format:'a4'}}).from(document.querySelector('.main-container')).save();
+  };
+
+  // ==================== INICIALIZAÇÃO E ABAS ====================
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const tab = btn.getAttribute('data-tab');
@@ -479,14 +612,12 @@
       btn.classList.add('active');
       if(tab === 'dashboard') atualizarDashboard();
       if(tab === 'registros') carregarRegistros();
-      if(tab === 'gerenciar') carregarQuestoes();
     });
   });
-  
+
   inicializarDropdowns();
   carregarRegistros();
-  gerarOpcoesInputs();
-  carregarQuestoes();
+  carregarTurmasNoSelect();
 </script>
 </body>
 </html>
