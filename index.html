@@ -52,7 +52,7 @@
     .question-text { font-size: 1.05rem; font-weight: 600; color: #1e293b; margin: 0.8rem 0; }
     .question-descriptor { background: white; border-left: 4px solid #3b82f6; padding: 0.8rem; border-radius: 8px; font-size: 0.85rem; color: #475569; margin-bottom: 1rem; }
     .question-image { max-width: 100%; max-height: 250px; border-radius: 16px; margin: 0.5rem 0; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-    .legenda-imagem { font-size: 0.8rem; color: #475569; text-align: center; margin-top: 0.3rem; font-style: italic; }
+    .legenda-imagem { font-size: 1.8rem; color: #ff0000; text-align: center; margin-top: 0.3rem; font-style: italic; }
     .imagem-container { margin: 1rem 0; text-align: center; }
     .option-group { display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1rem; }
     .option { display: flex; align-items: flex-start; gap: 0.8rem; cursor: pointer; padding: 8px 12px; border-radius: 12px; transition: 0.1s; }
@@ -169,63 +169,495 @@
 
  // ==================== BANCO DE QUESTÕES FIXO (COMPLETO) ====================
   const questoesPorAno = {
-    6: [
-    { numero: 1, disciplina: "Matemática", descriptor: "Resolver problemas relacionados ao conceito de múltiplos", texto: "Uma doceira produziu 120 brigadeiros e 150 beijinhos para uma festa. Ela precisa colocar esses doces em bandejas com a mesma quantidade de doces, de modo que todas as bandejas tenham apenas um tipo de doce e com a maior quantidade possível.", opcoes: ["9", "10", "27", "30"], resposta: 0, imagem: "https://i.ibb.co/qL35BVnT/Captura-de-tela-23-5-2026-164251-drive-google-com.jpg", legendaImagem: "A quantidade de bandejas necessárias será" },
-      { numero: 2, disciplina: "Matemática", descriptor: "Reconhecer frações que representam uma quantidade", texto: "Qual fração representa 2 de 5 partes iguais?", opcoes: ["1/5", "2/5", "3/5", "4/5"], resposta: 1, imagem: "", legendaImagem: "" },
-      { numero: 3, disciplina: "Língua Inglesa", descriptor: "Interpretar texto em língua estrangeira", texto: "O título 'I Don't Like Vegetables!' informa que alguém?", opcoes: ["Come verduras", "Não gosta de vegetais", "Prefere vegetais cozidos", "Não conversa"], resposta: 1, imagem: "", legendaImagem: "" },
-      { numero: 4, disciplina: "Língua Inglesa", descriptor: "Interpretar texto com auxílio de material gráfico", texto: "Na árvore genealógica apresentada, Charles Bernard é?", opcoes: ["Irmão de Emma", "Filho de Ava", "Avô de Amelie", "Pai de Brian"], resposta: 2, imagem: "", legendaImagem: "" },
-      { numero: 5, disciplina: "Geografia", descriptor: "Identificar características do sensoriamento remoto", texto: "O processo de obtenção de informações sem contato direto com a área mapeada é chamado de?", opcoes: ["Croqui", "Cartografia", "Técnicas cartográficas", "Sensoriamento remoto"], resposta: 3, imagem: "", legendaImagem: "" },
-      { numero: 6, disciplina: "Geografia", descriptor: "Reconhecer características do ponto de vista vertical", texto: "A visão que permite análise detalhada da distribuição dos elementos na paisagem é denominada?", opcoes: ["Horizontal", "Oblíqua", "Vertical", "Lateral"], resposta: 2, imagem: "", legendaImagem: "" },
-      { numero: 7, disciplina: "Língua Portuguesa", descriptor: "Distinguir fato de opinião", texto: "Em um texto sobre hospedagem com animais de estimação, qual trecho representa uma opinião?", opcoes: ["Colômbia tem 44% de hospedagens pet-friendly", "Quando se trata de viajar com os queridos companheiros de estimação", "Os cinco países com maior porcentagem de hóspedes", "Segundo a Airbnb, 27% dos anúncios"], resposta: 1, imagem: "", legendaImagem: "" },
-      { numero: 8, disciplina: "Língua Portuguesa", descriptor: "Interpretar texto com auxílio de material gráfico", texto: "Qual é a função do infográfico em um texto sobre desperdício de água?", opcoes: ["Acrescentar novo tema", "Questionar hipóteses", "Ensinar consertos hidráulicos", "Facilitar o acesso às informações"], resposta: 3, imagem: "", legendaImagem: "" },
-      { numero: 9, disciplina: "História", descriptor: "Compreender organização da sociedade asteca", texto: "Sobre a sociedade asteca, qual alternativa está correta?", opcoes: ["Camponeses realizavam rituais", "Comerciantes produziam alimentos", "Imperadores faziam trabalho braçal", "Sacerdotes eram funcionários do Estado"], resposta: 3, imagem: "", legendaImagem: "" },
-      { numero: 10, disciplina: "História", descriptor: "Reconhecer características da escrita egípcia", texto: "Sobre a escrita egípcia, pode-se afirmar que?", opcoes: ["Demótica retratava apenas animais", "Hieroglífica era usada em rituais religiosos", "Demótica era limitada aos camponeses", "Hieroglífica nunca foi traduzida"], resposta: 1, imagem: "", legendaImagem: "" },
-      { numero: 11, disciplina: "Ciências", descriptor: "Classificar substâncias puras e misturas", texto: "O gás ozônio, formado por 3 átomos de oxigênio, é classificado como?", opcoes: ["Substância pura heterogênea", "Mistura pura composta", "Substância pura simples", "Mistura heterogênea"], resposta: 2, imagem: "", legendaImagem: "" },
-      { numero: 12, disciplina: "Ciências", descriptor: "Reconhecer fatores de formação dos solos", texto: "O processo de desgaste da rocha que contribui para a formação dos solos é?", opcoes: ["Adubação", "Intemperismo", "Compostagem", "Evaporação"], resposta: 1, imagem: "", legendaImagem: "" }
-    ],
-    7: [
-      { numero: 1, disciplina: "Matemática", descriptor: "Resolver operações com números inteiros", texto: "Qual é o resultado de (-5) + 8 - 3?", opcoes: ["0", "1", "2", "3"], resposta: 1, imagem: "", legendaImagem: "" },
-      { numero: 2, disciplina: "Matemática", descriptor: "Calcular porcentagem", texto: "Qual é 25% de 200?", opcoes: ["25", "50", "75", "100"], resposta: 1, imagem: "", legendaImagem: "" },
-      { numero: 3, disciplina: "Língua Inglesa", descriptor: "Compreender textos em inglês", texto: "What is your name? - My name is _____", opcoes: ["Mary", "am Mary", "is Mary", "are Mary"], resposta: 0, imagem: "", legendaImagem: "" },
-      { numero: 4, disciplina: "Língua Inglesa", descriptor: "Identificar palavras em inglês", texto: "Qual palavra significa 'livro' em inglês?", opcoes: ["Pen", "Book", "Desk", "Door"], resposta: 1, imagem: "", legendaImagem: "" },
-      { numero: 5, disciplina: "Geografia", descriptor: "Identificar elementos climáticos", texto: "Qual é o principal fator que determina o clima de uma região?", opcoes: ["Vegetação", "Latitude", "População", "Arquitetura"], resposta: 1, imagem: "", legendaImagem: "" },
-      { numero: 6, disciplina: "Geografia", descriptor: "Compreender formação de relevos", texto: "As montanhas são formadas por processos de?", opcoes: ["Erosão apenas", "Erosão e deposição", "Deposição apenas", "Evaporação"], resposta: 1, imagem: "", legendaImagem: "" },
-      { numero: 7, disciplina: "Língua Portuguesa", descriptor: "Identificar classe de palavras", texto: "Em 'O menino corre rápido', qual é a função de 'rápido'?", opcoes: ["Nome", "Verbo", "Adjetivo", "Advérbio"], resposta: 3, imagem: "", legendaImagem: "" },
-      { numero: 8, disciplina: "Língua Portuguesa", descriptor: "Compreender figuras de linguagem", texto: "Em 'Seu coração é de pedra', temos que tipo de figura?", opcoes: ["Aliteração", "Metáfora", "Onomatopeia", "Hipérbole"], resposta: 1, imagem: "", legendaImagem: "" },
-      { numero: 9, disciplina: "História", descriptor: "Compreender feudalismo", texto: "O feudalismo era um sistema baseado em?", opcoes: ["Industrialização", "Relações senhor-vassalo", "Democracia", "Monarquia absoluta"], resposta: 1, imagem: "", legendaImagem: "" },
-      { numero: 10, disciplina: "História", descriptor: "Identificar períodos históricos", texto: "A Idade Média durou aproximadamente?", opcoes: ["500 a 1000 anos", "1000 a 1500 anos", "1500 a 2000 anos", "2000 a 2500 anos"], resposta: 1, imagem: "", legendaImagem: "" },
-      { numero: 11, disciplina: "Ciências", descriptor: "Compreender fotossíntese", texto: "Qual é o principal produto da fotossíntese?", opcoes: ["Dióxido de carbono", "Água", "Glicose", "Oxigênio"], resposta: 2, imagem: "", legendaImagem: "" },
-      { numero: 12, disciplina: "Ciências", descriptor: "Identificar tipos de energia", texto: "Qual é uma forma de energia renovável?", opcoes: ["Carvão mineral", "Petróleo", "Energia solar", "Gás natural"], resposta: 2, imagem: "", legendaImagem: "" }
-    ],
-    8: [
-      { numero: 1, disciplina: "Matemática", descriptor: "Resolver equações de primeiro grau", texto: "Qual é a solução de 2x + 5 = 13?", opcoes: ["2", "3", "4", "5"], resposta: 2, imagem: "", legendaImagem: "" },
-      { numero: 2, disciplina: "Matemática", descriptor: "Calcular área de figuras planas", texto: "Qual é a área de um quadrado com lado 5cm?", opcoes: ["10 cm²", "15 cm²", "20 cm²", "25 cm²"], resposta: 3, imagem: "", legendaImagem: "" },
-      { numero: 3, disciplina: "Língua Inglesa", descriptor: "Entender presente contínuo", texto: "Complete: I _____ playing football now.", opcoes: ["am", "is", "are", "be"], resposta: 0, imagem: "", legendaImagem: "" },
-      { numero: 4, disciplina: "Língua Inglesa", descriptor: "Identificar phrasal verbs", texto: "Complete: I _____ my homework yesterday.", opcoes: ["turn on", "turn up", "turned in", "turn down"], resposta: 2, imagem: "", legendaImagem: "" },
-      { numero: 5, disciplina: "Geografia", descriptor: "Entender tipos de clima", texto: "O clima tropical é caracterizado por?", opcoes: ["Temperaturas baixas", "Chuvas bem distribuídas", "Temperaturas altas e chuvas abundantes", "Secas prolongadas"], resposta: 2, imagem: "", legendaImagem: "" },
-      { numero: 6, disciplina: "Geografia", descriptor: "Compreender dinâmica populacional", texto: "O deslocamento de pessoas do campo para a cidade é chamado?", opcoes: ["Emigração", "Imigração", "Êxodo rural", "Migração internacional"], resposta: 2, imagem: "", legendaImagem: "" },
-      { numero: 7, disciplina: "Língua Portuguesa", descriptor: "Analisar estrutura textual", texto: "Qual é o principal objetivo de um texto informativo?", opcoes: ["Entreter", "Convencer", "Informar", "Emocionar"], resposta: 2, imagem: "", legendaImagem: "" },
-      { numero: 8, disciplina: "Língua Portuguesa", descriptor: "Compreender vícios de linguagem", texto: "Qual frase contém um exemplo de pleonasmo?", opcoes: ["Ela é muito inteligente", "Subir para cima", "A noite estava escura", "O menino correu rápido"], resposta: 1, imagem: "", legendaImagem: "" },
-      { numero: 9, disciplina: "História", descriptor: "Entender Renascimento", texto: "O Renascimento foi um movimento que ocorreu principalmente?", opcoes: ["Na Idade Média", "Na antiguidade clássica", "Nos séculos XV e XVI", "No século XX"], resposta: 2, imagem: "", legendaImagem: "" },
-      { numero: 10, disciplina: "História", descriptor: "Compreender Reforma Protestante", texto: "A Reforma Protestante começou com?", opcoes: ["Martinho Lutero", "João Calvino", "Henrique VIII", "Thomas Moro"], resposta: 0, imagem: "", legendaImagem: "" },
-      { numero: 11, disciplina: "Ciências", descriptor: "Entender transmissão de calor", texto: "Qual é um exemplo de condução térmica?", opcoes: ["Aquecedor elétrico", "Colher aquecendo na xícara", "Ar quente subindo", "Radiação solar"], resposta: 1, imagem: "", legendaImagem: "" },
-      { numero: 12, disciplina: "Ciências", descriptor: "Compreender reprodução assexuada", texto: "A reprodução por brotamento é um exemplo de?", opcoes: ["Reprodução sexuada", "Reprodução assexuada", "Evolução", "Mutação"], resposta: 1, imagem: "", legendaImagem: "" }
-    ],
-    9: [
-      { numero: 1, disciplina: "Matemática", descriptor: "Resolver sistema de equações", texto: "Qual é a solução do sistema x + y = 5 e x - y = 1?", opcoes: ["x=2, y=3", "x=3, y=2", "x=4, y=1", "x=1, y=4"], resposta: 1, imagem: "", legendaImagem: "" },
-      { numero: 2, disciplina: "Matemática", descriptor: "Calcular teorema de Pitágoras", texto: "Em um triângulo retângulo com catetos 3 e 4, qual é a hipotenusa?", opcoes: ["5", "6", "7", "8"], resposta: 0, imagem: "", legendaImagem: "" },
-      { numero: 3, disciplina: "Língua Inglesa", descriptor: "Entender condicional", texto: "Complete: If I _____ rich, I would travel.", opcoes: ["am", "was", "were", "been"], resposta: 2, imagem: "", legendaImagem: "" },
-      { numero: 4, disciplina: "Língua Inglesa", descriptor: "Compreender passive voice", texto: "A voz passiva de 'They built this house' é?", opcoes: ["This house was built", "This house is built", "This house are built", "Building this house"], resposta: 0, imagem: "", legendaImagem: "" },
-      { numero: 5, disciplina: "Geografia", descriptor: "Entender globalização", texto: "A globalização é caracterizada por?", opcoes: ["Isolamento de países", "Interconexão global", "Independência econômica", "Redução de comércio"], resposta: 1, imagem: "", legendaImagem: "" },
-      { numero: 6, disciplina: "Geografia", descriptor: "Compreender desenvolvimento sustentável", texto: "O desenvolvimento sustentável busca?", opcoes: ["Lucro máximo", "Equilíbrio econômico, social e ambiental", "Crescimento sem limite", "Proteção apenas ambiental"], resposta: 1, imagem: "", legendaImagem: "" },
-      { numero: 7, disciplina: "Língua Portuguesa", descriptor: "Analisar estilo de autor", texto: "A análise do estilo de um autor inclui?", opcoes: ["Apenas ortografia", "Sintaxe, vocabulário e recursos estilísticos", "Somente pontuação", "Apenas concordância"], resposta: 1, imagem: "", legendaImagem: "" },
-      { numero: 8, disciplina: "Língua Portuguesa", descriptor: "Compreender gênero textual", texto: "Um artigo de opinião é um texto que?", opcoes: ["Apenas informa", "Expõe argumentos pessoais", "Apenas entreté", "Apenas descreve"], resposta: 1, imagem: "", legendaImagem: "" },
-      { numero: 9, disciplina: "História", descriptor: "Entender Revolução Industrial", texto: "A Revolução Industrial começou?", opcoes: ["Na Itália", "Na Inglaterra", "Na França", "Na Alemanha"], resposta: 1, imagem: "", legendaImagem: "" },
-      { numero: 10, disciplina: "História", descriptor: "Compreender Guerra Fria", texto: "A Guerra Fria foi um conflito entre?", opcoes: ["EUA e URSS", "EUA e China", "Rússia e Europa", "Ásia e América"], resposta: 0, imagem: "", legendaImagem: "" },
-      { numero: 11, disciplina: "Ciências", descriptor: "Entender reações químicas", texto: "Em uma reação química, o que sempre ocorre?", opcoes: ["Mudança de estado", "Rearranjo de átomos", "Aumento de massa", "Diminuição de energia"], resposta: 1, imagem: "", legendaImagem: "" },
-      { numero: 12, disciplina: "Ciências", descriptor: "Compreender evolução", texto: "A seleção natural é um mecanismo da?", opcoes: ["Mutação", "Evolução", "Reprodução", "Adaptação"], resposta: 1, imagem: "", legendaImagem: "" }
-    ]
-  };
+  6: [
+    { 
+      numero: 1, 
+      disciplina: "Matemática", 
+      descriptor: "Resolver situações-problema que envolvam múltiplos e divisores de números naturais. 📚 - Aula 23", 
+      texto: "Uma doceira produziu 120 brigadeiros e 150 beijinhos para uma festa. Ela precisa colocar esses doces em bandejas com a mesma quantidade de doces, de modo que todas as bandejas tenham apenas um tipo de doce e com a maior quantidade possível.", 
+      opcoes: ["9", "10", "27", "30"], 
+      resposta: 0, 
+      imagem: "https://lh3.googleusercontent.com/d/1rFkQWvwJr1BGmVhXGtN9SXzLWUar7T9s", 
+      legendaImagem: "A quantidade de bandejas necessárias será" 
+    },
+    { 
+      numero: 2, 
+      disciplina: "Matemática", 
+      descriptor: "Reconhecer frações que representam uma quantidade", 
+      texto: "Qual fração representa 2 de 5 partes iguais?", 
+      opcoes: ["1/5", "2/5", "3/5", "4/5"], 
+      resposta: 1, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 3, 
+      disciplina: "Língua Inglesa", 
+      descriptor: "Interpretar texto em língua estrangeira", 
+      texto: "O título 'I Don't Like Vegetables!' informa que alguém?", 
+      opcoes: ["Come verduras", "Não gosta de vegetais", "Prefere vegetais cozidos", "Não conversa"], 
+      resposta: 1, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 4, 
+      disciplina: "Língua Inglesa", 
+      descriptor: "Interpretar texto com auxílio de material gráfico", 
+      texto: "Na árvore genealógica apresentada, Charles Bernard é?", 
+      opcoes: ["Irmão de Emma", "Filho de Ava", "Avô de Amelie", "Pai de Brian"], 
+      resposta: 2, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 5, 
+      disciplina: "Geografia", 
+      descriptor: "Identificar características do sensoriamento remoto", 
+      texto: "O processo de obtenção de informações sem contato direto com a área mapeada é chamado de?", 
+      opcoes: ["Croqui", "Cartografia", "Técnicas cartográficas", "Sensoriamento remoto"], 
+      resposta: 3, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 6, 
+      disciplina: "Geografia", 
+      descriptor: "Reconhecer características do ponto de vista vertical", 
+      texto: "A visão que permite análise detalhada da distribuição dos elementos na paisagem é denominada?", 
+      opcoes: ["Horizontal", "Oblíqua", "Vertical", "Lateral"], 
+      resposta: 2, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 7, 
+      disciplina: "Língua Portuguesa", 
+      descriptor: "Distinguir fato de opinião", 
+      texto: "Em um text sobre hospedagem com animais de estimação, qual trecho representa uma opinião?", 
+      opcoes: ["Colômbia tem 44% de hospedagens pet-friendly", "Quando se trata de viajar com os queridos companheiros de estimação", "Os cinco países com maior porcentagem de hóspedes", "Segundo a Airbnb, 27% dos anúncios"], 
+      resposta: 1, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 8, 
+      disciplina: "Língua Portuguesa", 
+      descriptor: "Interpretar texto com auxílio de material gráfico", 
+      texto: "Qual é a função do infográfico em um texto sobre desperdício de água?", 
+      opcoes: ["Acrescentar novo tema", "Questionar hipóteses", "Ensinar consertos hidráulicos", "Facilitar o acesso às informações"], 
+      resposta: 3, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 9, 
+      disciplina: "História", 
+      descriptor: "Compreender organização da sociedade asteca", 
+      texto: "Sobre a sociedade asteca, qual alternativa está correta?", 
+      opcoes: ["Camponeses realizavam rituais", "Comerciantes produziam alimentos", "Imperadores faziam trabalho braçal", "Sacerdotes eram funcionários do Estado"], 
+      resposta: 3, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 10, 
+      disciplina: "História", 
+      descriptor: "Reconhecer características da escrita egípcia", 
+      texto: "Sobre a escrita egípcia, pode-se afirmar que?", 
+      opcoes: ["Demótica retratava apenas animais", "Hieroglífica era usada em rituais religiosos", "Demótica era limitada aos camponeses", "Hieroglífica nunca foi traduzida"], 
+      resposta: 1, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 11, 
+      disciplina: "Ciências", 
+      descriptor: "Classificar substâncias puras e misturas", 
+      texto: "O gás ozônio, formado por 3 átomos de oxigênio, é classificado como?", 
+      opcoes: ["Substância pura heterogênea", "Mistura pura composta", "Substância pura simples", "Mistura heterogênea"], 
+      resposta: 2, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 12, 
+      disciplina: "Ciências", 
+      descriptor: "Reconhecer fatores de formação dos solos", 
+      texto: "O processo de desgaste da rocha que contribui para a formação dos solos é?", 
+      opcoes: ["Adubação", "Intemperismo", "Compostagem", "Evaporação"], 
+      resposta: 1, 
+      imagem: "", 
+      legendaImagem: "" 
+    }
+  ],
+  7: [
+    { 
+      numero: 1, 
+      disciplina: "Matemática", 
+      descriptor: "Resolver operações com números inteiros", 
+      texto: "Qual é o resultado de (-5) + 8 - 3?", 
+      opcoes: ["0", "1", "2", "3"], 
+      resposta: 1, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 2, 
+      disciplina: "Matemática", 
+      descriptor: "Calcular porcentagem", 
+      texto: "Qual é 25% de 200?", 
+      opcoes: ["25", "50", "75", "100"], 
+      resposta: 1, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 3, 
+      disciplina: "Língua Inglesa", 
+      descriptor: "Compreender textos em inglês", 
+      texto: "What is your name? - My name is _____", 
+      opcoes: ["Mary", "am Mary", "is Mary", "are Mary"], 
+      resposta: 0, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 4, 
+      disciplina: "Língua Inglesa", 
+      descriptor: "Identificar palavras em inglês", 
+      texto: "Qual palavra significa 'livro' em inglês?", 
+      opcoes: ["Pen", "Book", "Desk", "Door"], 
+      resposta: 1, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 5, 
+      disciplina: "Geografia", 
+      descriptor: "Identificar elementos climáticos", 
+      texto: "Qual é o principal fator que determina o clima de uma região?", 
+      opcoes: ["Vegetação", "Latitude", "População", "Arquitetura"], 
+      resposta: 1, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 6, 
+      disciplina: "Geografia", 
+      descriptor: "Compreender formação de relevos", 
+      texto: "As montanhas são formadas por processos de?", 
+      opcoes: ["Erosão apenas", "Erosão e deposição", "Deposição apenas", "Evaporação"], 
+      resposta: 1, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 7, 
+      disciplina: "Língua Portuguesa", 
+      descriptor: "Identificar classe de palavras", 
+      texto: "Em 'O menino corre rápido', qual é a função de 'rápido'?", 
+      opcoes: ["Nome", "Verbo", "Adjetivo", "Advérbio"], 
+      resposta: 3, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 8, 
+      disciplina: "Língua Portuguesa", 
+      descriptor: "Compreender figuras de linguagem", 
+      texto: "Em 'Seu coração é de pedra', temos que tipo de figura?", 
+      opcoes: ["Aliteração", "Metáfora", "Onomatopeia", "Hipérbole"], 
+      resposta: 1, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 9, 
+      disciplina: "História", 
+      descriptor: "Compreender feudalismo", 
+      texto: "O feudalismo era um sistema baseado em?", 
+      opcoes: ["Industrialização", "Relações senhor-vassalo", "Democracia", "Monarquia absoluta"], 
+      resposta: 1, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 10, 
+      disciplina: "História", 
+      descriptor: "Identificar períodos históricos", 
+      texto: "A Idade Média durou aproximadamente?", 
+      opcoes: ["500 a 1000 anos", "1000 a 1500 anos", "1500 a 2000 anos", "2000 a 2500 anos"], 
+      resposta: 1, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 11, 
+      disciplina: "Ciências", 
+      descriptor: "Compreender fotossíntese", 
+      texto: "Qual é o principal produto da fotossíntese?", 
+      opcoes: ["Dióxido de carbono", "Água", "Glicose", "Oxigênio"], 
+      resposta: 2, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 12, 
+      disciplina: "Ciências", 
+      descriptor: "Identificar tipos de energia", 
+      texto: "Qual é uma forma de energia renovável?", 
+      opcoes: ["Carvão mineral", "Petróleo", "Energia solar", "Gás natural"], 
+      resposta: 2, 
+      imagem: "", 
+      legendaImagem: "" 
+    }
+  ],
+  8: [
+    { 
+      numero: 1, 
+      disciplina: "Matemática", 
+      descriptor: "Resolver equações de primeiro grau", 
+      texto: "Qual é a solução de 2x + 5 = 13?", 
+      opcoes: ["2", "3", "4", "5"], 
+      resposta: 2, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 2, 
+      disciplina: "Matemática", 
+      descriptor: "Calcular área de figuras planas", 
+      texto: "Qual é a área de um quadrado com lado 5cm?", 
+      opcoes: ["10 cm²", "15 cm²", "20 cm²", "25 cm²"], 
+      resposta: 3, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 3, 
+      disciplina: "Língua Inglesa", 
+      descriptor: "Entender presente contínuo", 
+      texto: "Complete: I _____ playing football now.", 
+      opcoes: ["am", "is", "are", "be"], 
+      resposta: 0, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 4, 
+      disciplina: "Língua Inglesa", 
+      descriptor: "Identificar phrasal verbs", 
+      texto: "Complete: I _____ my homework yesterday.", 
+      opcoes: ["turn on", "turn up", "turned in", "turn down"], 
+      resposta: 2, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 5, 
+      disciplina: "Geografia", 
+      descriptor: "Entender tipos de clima", 
+      texto: "O clima tropical é caracterizado por?", 
+      opcoes: ["Temperaturas baixas", "Chuvas bem distribuídas", "Temperaturas altas e chuvas abundantes", "Secas prolongadas"], 
+      resposta: 2, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 6, 
+      disciplina: "Geografia", 
+      descriptor: "Compreender dinâmica populacional", 
+      texto: "O deslocamento de pessoas do campo para a cidade é chamado?", 
+      opcoes: ["Emigração", "Imigração", "Êxodo rural", "Migração internacional"], 
+      resposta: 2, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 7, 
+      disciplina: "Língua Portuguesa", 
+      descriptor: "Analisar estrutura textual", 
+      texto: "Qual é o principal objetivo de um texto informativo?", 
+      opcoes: ["Entreter", "Convencer", "Informar", "Emocionar"], 
+      resposta: 2, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 8, 
+      disciplina: "Língua Portuguesa", 
+      descriptor: "Compreender vícios de linguagem", 
+      texto: "Qual frase contém um exemplo de pleonasmo?", 
+      opcoes: ["Ela é muito inteligente", "Subir para cima", "A noite estava escura", "O menino correu rápido"], 
+      resposta: 1, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 9, 
+      disciplina: "História", 
+      descriptor: "Entender Renascimento", 
+      texto: "O Renascimento foi um movimento que ocorreu principalmente?", 
+      opcoes: ["Na Idade Média", "Na antiguidade clássica", "Nos séculos XV e XVI", "No século XX"], 
+      resposta: 2, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 10, 
+      disciplina: "História", 
+      descriptor: "Compreender Reforma Protestante", 
+      texto: "A Reforma Protestante começou com?", 
+      opcoes: ["Martinho Lutero", "João Calvino", "Henrique VIII", "Thomas Moro"], 
+      resposta: 0, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 11, 
+      disciplina: "Ciências", 
+      descriptor: "Entender transmissão de calor", 
+      texto: "Qual é um exemplo de condução térmica?", 
+      opcoes: ["Aquecedor elétrico", "Colher aquecendo na xícara", "Ar quente subindo", "Radiação solar"], 
+      resposta: 1, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 12, 
+      disciplina: "Ciências", 
+      descriptor: "Compreender reprodução assexuada", 
+      texto: "A reprodução por brotamento é um exemplo de?", 
+      opcoes: ["Reprodução sexuada", "Reprodução assexuada", "Evolução", "Mutação"], 
+      resposta: 1, 
+      imagem: "", 
+      legendaImagem: "" 
+    }
+  ],
+  9: [
+    { 
+      numero: 1, 
+      disciplina: "Matemática", 
+      descriptor: "Resolver sistema de equações", 
+      texto: "Qual é a solução do sistema x + y = 5 e x - y = 1?", 
+      opcoes: ["x=2, y=3", "x=3, y=2", "x=4, y=1", "x=1, y=4"], 
+      resposta: 1, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 2, 
+      disciplina: "Matemática", 
+      descriptor: "Calcular teorema de Pitágoras", 
+      texto: "Em um triângulo retângulo com catetos 3 e 4, qual é a hipotenusa?", 
+      opcoes: ["5", "6", "7", "8"], 
+      resposta: 0, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 3, 
+      disciplina: "Língua Inglesa", 
+      descriptor: "Entender condicional", 
+      texto: "Complete: If I _____ rich, I would travel.", 
+      opcoes: ["am", "was", "were", "been"], 
+      resposta: 2, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 4, 
+      disciplina: "Língua Inglesa", 
+      descriptor: "Compreender passive voice", 
+      texto: "A voz passiva de 'They built this house' é?", 
+      opcoes: ["This house was built", "This house is built", "This house are built", "Building this house"], 
+      resposta: 0, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 5, 
+      disciplina: "Geografia", 
+      descriptor: "Entender globalização", 
+      texto: "A globalização é caracterizada por?", 
+      opcoes: ["Isolamento de países", "Interconexão global", "Independência econômica", "Redução de comércio"], 
+      resposta: 1, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 6, 
+      disciplina: "Geografia", 
+      descriptor: "Compreender desenvolvimento sustentável", 
+      texto: "O desenvolvimento sustentável busca?", 
+      opcoes: ["Lucro máximo", "Equilíbrio econômico, social e ambiental", "Crescimento sem limite", "Proteção apenas ambiental"], 
+      resposta: 1, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 7, 
+      disciplina: "Língua Portuguesa", 
+      descriptor: "Analisar estilo de autor", 
+      texto: "A análise do estilo de um autor includes?", 
+      opcoes: ["Apenas ortografia", "Sintaxe, vocabulário e recursos estilísticos", "Somente pontuação", "Apenas concordância"], 
+      resposta: 1, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 8, 
+      disciplina: "Língua Portuguesa", 
+      descriptor: "Compreender gênero textual", 
+      texto: "Um artigo de opinião é um texto que?", 
+      opcoes: ["Apenas informa", "Expõe argumentos pessoais", "Apenas entretém", "Apenas descreve"], 
+      resposta: 1, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 9, 
+      disciplina: "História", 
+      descriptor: "Entender Revolução Industrial", 
+      texto: "A Revolução Industrial começou?", 
+      opcoes: ["Na Itália", "Na Inglaterra", "Na França", "Na Alemanha"], 
+      resposta: 1, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 10, 
+      disciplina: "História", 
+      descriptor: "Compreender Guerra Fria", 
+      texto: "A Guerra Fria foi um conflito entre?", 
+      opcoes: ["EUA e URSS", "EUA e China", "Rússia e Europa", "Ásia e América"], 
+      resposta: 0, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 11, 
+      disciplina: "Ciências", 
+      descriptor: "Entender reações químicas", 
+      texto: "Em uma reação química, o que sempre ocorre?", 
+      opcoes: ["Mudança de estado", "Rearranjo de átomos", "Aumento de massa", "Diminuição de energia"], 
+      resposta: 1, 
+      imagem: "", 
+      legendaImagem: "" 
+    },
+    { 
+      numero: 12, 
+      disciplina: "Ciências", 
+      descriptor: "Compreender evolução", 
+      texto: "A seleção natural é um mecanismo da?", 
+      opcoes: ["Mutação", "Evolução", "Reprodução", "Adaptação"], 
+      resposta: 1, 
+      imagem: "", 
+      legendaImagem: "" 
+    }
+  ]
+};
   // Na implementação real, as questões estão completas. Aqui vou manter um resumo,
   // mas você pode copiar as questões do arquivo anterior que estavam funcionando.
   // Para o código funcionar, preencha com as questões completas ou mantenha as que você já tinha.
