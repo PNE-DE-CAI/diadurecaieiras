@@ -1064,7 +1064,7 @@ window.gerarCertificadoFromDashboard = async (turmaId) => {
     } catch (err) { showToast('Erro no dashboard', true); }
   };
   window.gerarPDFDashboard = () => {
-    html2pdf().set({margin:10, filename:'Dashboard_Quiz.pdf', orientation:'landscape'}).from(document.querySelector('.main-container')).save();
+    html2pdf().set({margin:10, filename:'Dashboard_PaulistãoSARESP2026.pdf', orientation:'landscape'}).from(document.querySelector('.main-container')).save();
   };
 
   // ==================== INICIALIZAÇÃO E ABAS ====================
