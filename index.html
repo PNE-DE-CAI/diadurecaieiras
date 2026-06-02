@@ -842,7 +842,7 @@
     questoesAtuais = [...questoes];
     respostas = new Array(questoesAtuais.length).fill(null);
     questaoAtual = 0;
-    tempoRestante = 120;
+    tempoRestante = 1500;
     document.getElementById('quizArea').style.display = 'block';
     document.getElementById('resultadoFinal').style.display = 'none';
     document.getElementById('quizTitulo').innerHTML = `${escapeHtml(turmaSelecionada.escola)} - ${escapeHtml(turmaSelecionada.anoSerie)} ${escapeHtml(turmaSelecionada.turma)}`;
